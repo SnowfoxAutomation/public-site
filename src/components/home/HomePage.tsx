@@ -3,6 +3,7 @@ import { Header } from "@/components/shell/Header";
 
 import { Hero } from "./Hero";
 import { MissionPreview } from "./MissionPreview";
+import { WhySnowfox } from "./WhySnowfox";
 
 export function HomePage() {
   return (
@@ -12,6 +13,8 @@ export function HomePage() {
       <Hero />
 
       <MissionPreview />
+
+      <WhySnowfox />
 
       <Footer />
     </>

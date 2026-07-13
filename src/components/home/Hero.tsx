@@ -1,3 +1,4 @@
+import { CallToAction } from "@/components/shared/CallToAction";
 import { Container } from "@/components/shared/Container";
 import { Section } from "@/components/shared/Section";
 
@@ -6,8 +7,8 @@ import { heroVariants } from "./Hero.variants";
 export function Hero() {
   return (
     <Section
-      className={heroVariants.section}
       variant="transparent"
+      className={heroVariants.section}
     >
       <Container>
         <div className={heroVariants.content}>
@@ -22,14 +23,25 @@ export function Hero() {
           </h1>
 
           <p className={heroVariants.description}>
-            Snowfox builds tailored AI-powered tools that
-            transform large volumes of information into
-            practical intelligence while respecting Canadian
-            laws, policies and operational requirements.
+            Snowfox develops tailored automation
+            solutions that enable defence and
+            intelligence professionals to spend
+            more time on mission-critical work and
+            less time navigating administrative
+            complexity.
           </p>
 
           <div className={heroVariants.actions}>
-            {/* Buttons added next milestone */}
+            <CallToAction
+              href="/contact"
+              label="Contact Us"
+            />
+
+            <CallToAction
+              href="/mission"
+              label="Our Mission"
+              variant="secondary"
+            />
           </div>
         </div>
       </Container>

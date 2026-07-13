@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { CallToAction } from "@/components/shared/CallToAction";
 import { Container } from "@/components/shared/Container";
 
 import { Navigation } from "./Navigation";
@@ -18,6 +19,12 @@ export function Header() {
           </Link>
 
           <Navigation />
+
+          <CallToAction
+            href="/login"
+            label="Client Login"
+            variant="secondary"
+          />
         </div>
       </Container>
     </header>

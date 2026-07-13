@@ -11,13 +11,14 @@ export const headerVariants = {
 
   content: [
     "flex",
-    "h-20",
+    "min-h-20",
     "items-center",
     "justify-between",
+    "gap-8",
   ].join(" "),
 
   logo: [
-    "text-xl",
+    "text-2xl",
     "font-semibold",
     "tracking-tight",
     "text-foreground",
