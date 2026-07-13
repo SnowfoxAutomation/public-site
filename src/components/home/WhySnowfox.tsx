@@ -1,7 +1,10 @@
 import { homeContent } from "@/content/home";
 
 import { Container } from "@/components/shared/Container";
+import { ContentCard } from "@/components/shared/ContentCard";
+import { ContentGrid } from "@/components/shared/ContentGrid";
 import { Section } from "@/components/shared/Section";
+import { SectionHeader } from "@/components/shared/SectionHeader";
 
 import { whySnowfoxVariants } from "./WhySnowfox.variants";
 
@@ -13,22 +16,17 @@ export function WhySnowfox() {
     >
       <Container>
         <div className={whySnowfoxVariants.content}>
-          <div>
-            <h2 className={whySnowfoxVariants.heading}>
-              {homeContent.whySnowfox.heading}
-            </h2>
+          <SectionHeader
+            title={homeContent.whySnowfox.heading}
+            description={homeContent.whySnowfox.introduction}
+            className={whySnowfoxVariants.header}
+          />
 
-            <p className={whySnowfoxVariants.introduction}>
-              {homeContent.whySnowfox.introduction}
-            </p>
-          </div>
-
-          <div className={whySnowfoxVariants.grid}>
+          <ContentGrid
+            className={whySnowfoxVariants.grid}
+          >
             {homeContent.whySnowfox.pillars.map((pillar) => (
-              <article
-                key={pillar.title}
-                className={whySnowfoxVariants.card}
-              >
+              <ContentCard key={pillar.title}>
                 <h3 className={whySnowfoxVariants.cardHeading}>
                   {pillar.title}
                 </h3>
@@ -36,9 +34,9 @@ export function WhySnowfox() {
                 <p className={whySnowfoxVariants.cardBody}>
                   {pillar.description}
                 </p>
-              </article>
+              </ContentCard>
             ))}
-          </div>
+          </ContentGrid>
         </div>
       </Container>
     </Section>

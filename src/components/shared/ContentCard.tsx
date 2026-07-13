@@ -5,13 +5,11 @@ import { cn } from "@/lib/utils/cn";
 import { contentCardVariants } from "./ContentCard.variants";
 
 type ContentCardProps = {
-  title: string;
   children: ReactNode;
   className?: string;
 };
 
 export function ContentCard({
-  title,
   children,
   className,
 }: ContentCardProps) {
@@ -22,13 +20,7 @@ export function ContentCard({
         className,
       )}
     >
-      <h3 className={contentCardVariants.title}>
-        {title}
-      </h3>
-
-      <div className={contentCardVariants.content}>
-        {children}
-      </div>
+      {children}
     </article>
   );
 }

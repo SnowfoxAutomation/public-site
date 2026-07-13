@@ -1,4 +1,11 @@
 export const homeContent = {
+  mission: {
+    heading: "Mission",
+
+    description:
+      "Snowfox develops tailored automation tools for the Canadian Defence sector using Canadian-developed machine learning models. Our solutions help organizations harness vast quantities of structured and unstructured information while embedding the constraints of Canadian legislation, policy and operational requirements directly into the workflow.",
+  },
+
   whySnowfox: {
     heading: "Why Snowfox?",
 

@@ -7,13 +7,4 @@ export const contentCardVariants = {
     "p-8",
     "shadow-[var(--shadow-card)]",
   ].join(" "),
-
-  title: [
-    "mb-[var(--component-gap-medium)]",
-    "text-foreground",
-  ].join(" "),
-
-  content: [
-    "text-muted-foreground",
-  ].join(" "),
 } as const;

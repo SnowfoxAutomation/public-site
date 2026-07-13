@@ -1,5 +1,8 @@
+import { homeContent } from "@/content/home";
+
 import { Container } from "@/components/shared/Container";
 import { Section } from "@/components/shared/Section";
+import { SectionHeader } from "@/components/shared/SectionHeader";
 
 import { missionPreviewVariants } from "./MissionPreview.variants";
 
@@ -10,22 +13,11 @@ export function MissionPreview() {
       className={missionPreviewVariants.section}
     >
       <Container>
-        <div className={missionPreviewVariants.content}>
-          <h2 className={missionPreviewVariants.heading}>
-            Mission
-          </h2>
-
-          <p className={missionPreviewVariants.body}>
-            Snowfox develops tailored automation tools for
-            the Canadian Defence sector using
-            Canadian-developed machine learning models.
-            Our solutions help organizations harness vast
-            quantities of structured and unstructured
-            information while embedding the constraints of
-            Canadian legislation, policy and operational
-            requirements directly into the workflow.
-          </p>
-        </div>
+        <SectionHeader
+          title={homeContent.mission.heading}
+          description={homeContent.mission.description}
+          className={missionPreviewVariants.header}
+        />
       </Container>
     </Section>
   );
