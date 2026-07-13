@@ -1,13 +1,19 @@
-import { Container } from "@/components/shared/Container";
+import { Footer } from "@/components/shell/Footer";
+import { Header } from "@/components/shell/Header";
 
-import { homePageVariants } from "./HomePage.variants";
+import { Hero } from "./Hero";
+import { MissionPreview } from "./MissionPreview";
 
 export function HomePage() {
   return (
-    <main className={homePageVariants.main}>
-      <Container>
-        <h1 className={homePageVariants.heading}>Snowfox Automation</h1>
-      </Container>
-    </main>
+    <>
+      <Header />
+
+      <Hero />
+
+      <MissionPreview />
+
+      <Footer />
+    </>
   );
 }

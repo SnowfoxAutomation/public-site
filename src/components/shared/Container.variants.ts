@@ -1,18 +1,24 @@
-import { cva } from "class-variance-authority";
+export const containerVariants = {
+  root: {
+    small: [
+      "mx-auto",
+      "w-full",
+      "max-w-[var(--content-width-small)]",
+      "px-[var(--page-gutter)]",
+    ].join(" "),
 
-export const containerVariants = cva(
-  "mx-auto w-full px-[var(--page-gutter)]",
-  {
-    variants: {
-      size: {
-        small: "max-w-[var(--content-width-small)]",
-        medium: "max-w-[var(--content-width-medium)]",
-        large: "max-w-[var(--content-width-large)]",
-        full: "max-w-none",
-      },
-    },
-    defaultVariants: {
-      size: "large",
-    },
+    medium: [
+      "mx-auto",
+      "w-full",
+      "max-w-[var(--content-width-medium)]",
+      "px-[var(--page-gutter)]",
+    ].join(" "),
+
+    large: [
+      "mx-auto",
+      "w-full",
+      "max-w-[var(--content-width-large)]",
+      "px-[var(--page-gutter)]",
+    ].join(" "),
   },
-);
+} as const;

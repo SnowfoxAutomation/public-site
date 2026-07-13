@@ -53,14 +53,21 @@
   --letter-spacing-label: 0.08em;
 
   /* Layout */
+
   --content-width-small: 48rem;
   --content-width-medium: 64rem;
   --content-width-large: 80rem;
 
   --page-gutter: clamp(1.25rem, 4vw, 3rem);
+
+  --section-spacing-xsmall: clamp(2rem, 5vw, 3rem);
   --section-spacing-small: clamp(4rem, 8vw, 6rem);
-  --section-spacing-medium: clamp(5rem, 10vw, 8rem);
-  --section-spacing-large: clamp(6rem, 12vw, 10rem);
+  --section-spacing-medium: clamp(6rem, 10vw, 8rem);
+  --section-spacing-large: clamp(8rem, 12vw, 10rem);
+
+  --component-gap-small: 0.75rem;
+  --component-gap-medium: 1.5rem;
+  --component-gap-large: 2.5rem;
 
   /* Shape */
   --radius-small: 0.375rem;

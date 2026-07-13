@@ -1,35 +1,31 @@
-import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
-import type { VariantProps } from "class-variance-authority";
+import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils/cn";
 
 import { containerVariants } from "./Container.variants";
 
-type ContainerProps<TElement extends ElementType = "div"> = {
-  as?: TElement;
+type ContainerSize =
+  keyof typeof containerVariants.root;
+
+type ContainerProps = {
   children: ReactNode;
   className?: string;
-} & VariantProps<typeof containerVariants> &
-  Omit<
-    ComponentPropsWithoutRef<TElement>,
-    "as" | "children" | "className" | "size"
-  >;
+  size?: ContainerSize;
+};
 
-export function Container<TElement extends ElementType = "div">({
-  as,
+export function Container({
   children,
   className,
-  size,
-  ...props
-}: ContainerProps<TElement>) {
-  const Component = as ?? "div";
-
+  size = "large",
+}: ContainerProps) {
   return (
-    <Component
-      className={cn(containerVariants({ size }), className)}
-      {...props}
+    <div
+      className={cn(
+        containerVariants.root[size],
+        className,
+      )}
     >
       {children}
-    </Component>
+    </div>
   );
 }
