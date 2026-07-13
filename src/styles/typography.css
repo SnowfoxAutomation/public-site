@@ -1,0 +1,39 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--site-text);
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--font-size-heading-1);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-display);
+}
+
+h2 {
+  font-size: var(--font-size-heading-2);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-heading);
+}
+
+h3 {
+  font-size: var(--font-size-heading-3);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-heading);
+}
+
+p {
+  color: var(--site-text-muted);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  text-wrap: pretty;
+}
+
+small {
+  font-size: var(--font-size-body-small);
+}
