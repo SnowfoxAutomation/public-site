@@ -1,7 +1,7 @@
 import { homeContent } from "@/content/home";
 
 import { Reveal } from "@/components/state/Reveal";
-import { CallToAction } from "@/components/shared/CallToAction";
+import { ContactForm } from "@/components/contact/ContactForm";
 import { Container } from "@/components/shared/Container";
 import { Section } from "@/components/shared/Section";
 import { SectionHeader } from "@/components/shared/SectionHeader";
@@ -23,10 +23,7 @@ export function ContactSection() {
               description={homeContent.contact.description}
             />
 
-            <CallToAction
-              href={homeContent.contact.action.href}
-              label={homeContent.contact.action.label}
-            />
+            <ContactForm />
 
             <p className={contactSectionVariants.note}>
               {homeContent.contact.note}
