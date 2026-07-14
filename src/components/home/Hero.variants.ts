@@ -7,32 +7,30 @@ export const heroVariants = {
   content: [
     "flex",
     "flex-col",
+    "items-center",
     "gap-8",
     "text-center",
-    "items-center",
   ].join(" "),
 
   eyebrow: [
     "text-sm",
     "font-semibold",
     "uppercase",
-    "tracking-[0.2em]",
+    "tracking-[var(--letter-spacing-label)]",
     "text-brand",
   ].join(" "),
 
   title: [
-    "max-w-4xl",
-    "text-6xl",
-    "font-semibold",
-    "leading-tight",
-    "tracking-tight",
+    "max-w-5xl",
+    "text-[length:var(--font-size-display)]",
+    "leading-[var(--line-height-display)]",
+    "tracking-[var(--letter-spacing-display)]",
     "text-foreground",
   ].join(" "),
 
   description: [
     "max-w-3xl",
-    "text-xl",
-    "leading-8",
+    "text-[length:var(--font-size-body-large)]",
     "text-muted-foreground",
   ].join(" "),
 
@@ -41,6 +39,6 @@ export const heroVariants = {
     "flex-wrap",
     "justify-center",
     "gap-4",
-    "pt-4",
+    "pt-2",
   ].join(" "),
 } as const;

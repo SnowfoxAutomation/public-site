@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import "@/styles/tokens.css";
 import "@/styles/typography.css";
 import "@/styles/globals.css";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/cn";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 

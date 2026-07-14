@@ -1,3 +1,5 @@
+import { homeContent } from "@/content/home";
+
 import { CallToAction } from "@/components/shared/CallToAction";
 import { Container } from "@/components/shared/Container";
 import { Section } from "@/components/shared/Section";
@@ -7,39 +9,35 @@ import { heroVariants } from "./Hero.variants";
 export function Hero() {
   return (
     <Section
-      variant="transparent"
+      aria-labelledby="hero-heading"
       className={heroVariants.section}
     >
       <Container>
         <div className={heroVariants.content}>
           <p className={heroVariants.eyebrow}>
-            Canadian Developed AI
+            {homeContent.hero.eyebrow}
           </p>
 
-          <h1 className={heroVariants.title}>
-            Secure automation for defence,
-            intelligence and mission-critical
-            decision making.
+          <h1
+            id="hero-heading"
+            className={heroVariants.title}
+          >
+            {homeContent.hero.heading}
           </h1>
 
           <p className={heroVariants.description}>
-            Snowfox develops tailored automation
-            solutions that enable defence and
-            intelligence professionals to spend
-            more time on mission-critical work and
-            less time navigating administrative
-            complexity.
+            {homeContent.hero.description}
           </p>
 
           <div className={heroVariants.actions}>
             <CallToAction
-              href="/contact"
-              label="Contact Us"
+              href={homeContent.hero.primaryAction.href}
+              label={homeContent.hero.primaryAction.label}
             />
 
             <CallToAction
-              href="/mission"
-              label="Our Mission"
+              href={homeContent.hero.secondaryAction.href}
+              label={homeContent.hero.secondaryAction.label}
               variant="secondary"
             />
           </div>

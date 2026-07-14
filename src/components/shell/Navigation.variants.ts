@@ -1,8 +1,9 @@
 export const navigationVariants = {
   list: [
-    "flex",
+    "hidden",
     "items-center",
     "gap-8",
+    "md:flex",
   ].join(" "),
 
   link: [
@@ -10,6 +11,7 @@ export const navigationVariants = {
     "font-medium",
     "text-muted-foreground",
     "transition-colors",
+    "duration-[var(--transition-fast)]",
     "hover:text-foreground",
   ].join(" "),
 } as const;

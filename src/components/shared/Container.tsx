@@ -1,4 +1,7 @@
-import type { ReactNode } from "react";
+import type {
+  ComponentPropsWithoutRef,
+  ReactNode,
+} from "react";
 
 import { cn } from "@/lib/utils/cn";
 
@@ -7,16 +10,17 @@ import { containerVariants } from "./Container.variants";
 type ContainerSize =
   keyof typeof containerVariants.root;
 
-type ContainerProps = {
-  children: ReactNode;
-  className?: string;
-  size?: ContainerSize;
-};
+type ContainerProps =
+  ComponentPropsWithoutRef<"div"> & {
+    children: ReactNode;
+    size?: ContainerSize;
+  };
 
 export function Container({
   children,
   className,
   size = "large",
+  ...props
 }: ContainerProps) {
   return (
     <div
@@ -24,6 +28,7 @@ export function Container({
         containerVariants.root[size],
         className,
       )}
+      {...props}
     >
       {children}
     </div>

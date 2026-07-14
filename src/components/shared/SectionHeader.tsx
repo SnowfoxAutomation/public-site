@@ -1,19 +1,24 @@
+import type {
+  ComponentPropsWithoutRef,
+} from "react";
+
 import { cn } from "@/lib/utils/cn";
 
 import { sectionHeaderVariants } from "./SectionHeader.variants";
 
-type SectionHeaderProps = {
-  title: string;
-  description?: string;
-  eyebrow?: string;
-  className?: string;
-};
+type SectionHeaderProps =
+  ComponentPropsWithoutRef<"header"> & {
+    title: string;
+    description?: string;
+    eyebrow?: string;
+  };
 
 export function SectionHeader({
   title,
   description,
   eyebrow,
   className,
+  ...props
 }: SectionHeaderProps) {
   return (
     <header
@@ -21,6 +26,7 @@ export function SectionHeader({
         sectionHeaderVariants.root,
         className,
       )}
+      {...props}
     >
       {eyebrow ? (
         <p className={sectionHeaderVariants.eyebrow}>

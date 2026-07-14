@@ -3,8 +3,8 @@ import Link from "next/link";
 import { CallToAction } from "@/components/shared/CallToAction";
 import { Container } from "@/components/shared/Container";
 
-import { Navigation } from "./Navigation";
 import { headerVariants } from "./Header.variants";
+import { Navigation } from "./Navigation";
 
 export function Header() {
   return (
@@ -13,6 +13,7 @@ export function Header() {
         <div className={headerVariants.content}>
           <Link
             href="/"
+            aria-label="Snowfox Automation"
             className={headerVariants.logo}
           >
             Snowfox
@@ -21,8 +22,8 @@ export function Header() {
           <Navigation />
 
           <CallToAction
-            href="/login"
-            label="Client Login"
+            href="#contact"
+            label="Contact"
             variant="secondary"
           />
         </div>

@@ -1,17 +1,21 @@
-import type { ReactNode } from "react";
+import type {
+  ComponentPropsWithoutRef,
+  ReactNode,
+} from "react";
 
 import { cn } from "@/lib/utils/cn";
 
 import { pageVariants } from "./Page.variants";
 
-type PageProps = {
-  children: ReactNode;
-  className?: string;
-};
+type PageProps =
+  ComponentPropsWithoutRef<"main"> & {
+    children: ReactNode;
+  };
 
 export function Page({
   children,
   className,
+  ...props
 }: PageProps) {
   return (
     <main
@@ -19,6 +23,7 @@ export function Page({
         pageVariants.root,
         className,
       )}
+      {...props}
     >
       {children}
     </main>

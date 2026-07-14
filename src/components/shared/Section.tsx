@@ -1,4 +1,7 @@
-import type { ReactNode } from "react";
+import type {
+  ComponentPropsWithoutRef,
+  ReactNode,
+} from "react";
 
 import { cn } from "@/lib/utils/cn";
 
@@ -7,16 +10,17 @@ import { sectionVariants } from "./Section.variants";
 type SectionVariant =
   keyof typeof sectionVariants.root;
 
-type SectionProps = {
-  children: ReactNode;
-  className?: string;
-  variant?: SectionVariant;
-};
+type SectionProps =
+  ComponentPropsWithoutRef<"section"> & {
+    children: ReactNode;
+    variant?: SectionVariant;
+  };
 
 export function Section({
   children,
   className,
   variant = "transparent",
+  ...props
 }: SectionProps) {
   return (
     <section
@@ -24,6 +28,7 @@ export function Section({
         sectionVariants.root[variant],
         className,
       )}
+      {...props}
     >
       {children}
     </section>

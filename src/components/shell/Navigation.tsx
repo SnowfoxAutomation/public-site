@@ -6,7 +6,7 @@ import { navigationVariants } from "./Navigation.variants";
 
 export function Navigation() {
   return (
-    <nav aria-label="Primary">
+    <nav aria-label="Primary navigation">
       <ul className={navigationVariants.list}>
         {navigation.map((item) => (
           <li key={item.href}>

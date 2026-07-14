@@ -1,20 +1,25 @@
+import { Page } from "@/components/shared/Page";
 import { Footer } from "@/components/shell/Footer";
 import { Header } from "@/components/shell/Header";
 
+import { AboutSection } from "./AboutSection";
+import { ContactSection } from "./ContactSection";
 import { Hero } from "./Hero";
-import { MissionPreview } from "./MissionPreview";
-import { WhySnowfox } from "./WhySnowfox";
+import { MissionSection } from "./MissionSection";
+import { ProductsSection } from "./ProductsSection";
 
 export function HomePage() {
   return (
     <>
       <Header />
 
-      <Hero />
-
-      <MissionPreview />
-
-      <WhySnowfox />
+      <Page>
+        <Hero />
+        <MissionSection />
+        <ProductsSection />
+        <AboutSection />
+        <ContactSection />
+      </Page>
 
       <Footer />
     </>
