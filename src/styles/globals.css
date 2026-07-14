@@ -91,3 +91,109 @@ ol {
     transition-duration: 0.01ms !important;
   }
 }
+
+@keyframes hero-pulse {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+
+  50% {
+    transform: translateX(-50%) scale(1.08);
+  }
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-18px);
+  }
+}
+
+@keyframes hero-float-delayed {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(18px);
+  }
+}
+
+.animate-hero-pulse {
+  animation: hero-pulse 14s ease-in-out infinite;
+}
+
+.animate-hero-float {
+  animation: hero-float 16s ease-in-out infinite;
+}
+
+.animate-hero-float-delayed {
+  animation: hero-float-delayed 18s ease-in-out infinite;
+}
+
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(
+      to right,
+      var(--site-border) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      var(--site-border) 1px,
+      transparent 1px
+    );
+
+  background-size: 4rem 4rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-pulse,
+  .animate-hero-float,
+  .animate-hero-float-delayed {
+    animation: none;
+  }
+}
+
+@keyframes logo-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-logo-fade {
+  animation: logo-fade 700ms ease-out;
+}
+
+@media (hover: hover) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  section {
+    scroll-margin-top: 6rem;
+  }
+}
+
+::selection {
+  background: rgb(from var(--site-brand) r g b / 18%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-logo-fade {
+    animation: none;
+  }
+}
+

@@ -9,14 +9,15 @@ export const footerVariants = {
     "grid",
     "gap-12",
     "py-[var(--section-spacing-small)]",
-    "md:grid-cols-[1fr_auto]",
+    "md:grid-cols-[2fr_1fr]",
+    "items-start",
   ].join(" "),
 
   identity: [
     "flex",
-    "max-w-md",
+    "max-w-lg",
     "flex-col",
-    "gap-4",
+    "gap-5",
   ].join(" "),
 
   logo: [
@@ -27,13 +28,15 @@ export const footerVariants = {
   ].join(" "),
 
   description: [
+    "max-w-md",
+    "leading-7",
     "text-muted-foreground",
   ].join(" "),
 
   navigation: [
     "grid",
-    "gap-4",
-    "text-right",
+    "gap-3",
+    "justify-items-end",
   ].join(" "),
 
   link: [
@@ -41,11 +44,12 @@ export const footerVariants = {
     "font-medium",
     "text-muted-foreground",
     "transition-colors",
-    "duration-[var(--transition-fast)]",
+    "duration-300",
     "hover:text-foreground",
   ].join(" "),
 
   legal: [
+    "mt-8",
     "border-t",
     "border-border",
     "py-6",

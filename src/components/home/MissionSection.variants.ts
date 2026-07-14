@@ -26,4 +26,10 @@ export const missionSectionVariants = {
     "leading-[var(--line-height-body)]",
     "text-muted-foreground",
   ].join(" "),
+
+  cardReveal: [
+    "",
+    "delay-100",
+    "delay-200",
+  ],
 } as const;

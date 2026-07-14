@@ -14,8 +14,9 @@ export const productsSectionVariants = {
     "size-9",
     "text-brand",
     "transition-transform",
-    "duration-[var(--transition-standard)]",
+    "duration-500",
     "group-hover:scale-110",
+    "group-hover:rotate-3",
   ].join(" "),
 
   cardTitle: [
@@ -29,4 +30,13 @@ export const productsSectionVariants = {
     "leading-[var(--line-height-body)]",
     "text-muted-foreground",
   ].join(" "),
+
+  cardReveal: [
+    "",
+    "delay-75",
+    "delay-150",
+    "delay-200",
+    "delay-300",
+    "delay-500",
+  ],
 } as const;

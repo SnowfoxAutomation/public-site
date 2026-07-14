@@ -9,6 +9,7 @@ import {
 
 import { homeContent } from "@/content/home";
 
+import { Reveal } from "@/components/state/Reveal";
 import { Container } from "@/components/shared/Container";
 import { ContentCard } from "@/components/shared/ContentCard";
 import { ContentGrid } from "@/components/shared/ContentGrid";
@@ -28,57 +29,60 @@ const icons = {
 
 export function ProductsSection() {
   return (
-    <Section
-      id="products"
-      variant="transparent"
-      className={productsSectionVariants.section}
-    >
+    <Section id="products">
       <Container>
-        <div className={productsSectionVariants.content}>
-          <SectionHeader
-            id="products-heading"
-            eyebrow={homeContent.products.eyebrow}
-            title={homeContent.products.heading}
-            description={homeContent.products.description}
-          />
+        <Reveal>
+          <div className={productsSectionVariants.content}>
+            <SectionHeader
+              eyebrow={homeContent.products.eyebrow}
+              title={homeContent.products.heading}
+              description={homeContent.products.description}
+            />
 
-          <ContentGrid>
-            {homeContent.products.capabilities.map(
-              (capability) => {
-                const Icon =
-                  icons[capability.icon];
+            <ContentGrid>
+              {homeContent.products.capabilities.map(
+                (capability, index) => {
+                  const Icon =
+                    icons[capability.icon];
 
-                return (
-                  <ContentCard
-                    key={capability.title}
-                  >
-                    <Icon
+                  return (
+                    <Reveal
+                      key={capability.title}
                       className={
-                        productsSectionVariants.icon
-                      }
-                    />
-
-                    <h3
-                      className={
-                        productsSectionVariants.cardTitle
+                        productsSectionVariants
+                          .cardReveal[index]
                       }
                     >
-                      {capability.title}
-                    </h3>
+                      <ContentCard>
+                        <Icon
+                          className={
+                            productsSectionVariants.icon
+                          }
+                        />
 
-                    <p
-                      className={
-                        productsSectionVariants.cardBody
-                      }
-                    >
-                      {capability.description}
-                    </p>
-                  </ContentCard>
-                );
-              },
-            )}
-          </ContentGrid>
-        </div>
+                        <h3
+                          className={
+                            productsSectionVariants.cardTitle
+                          }
+                        >
+                          {capability.title}
+                        </h3>
+
+                        <p
+                          className={
+                            productsSectionVariants.cardBody
+                          }
+                        >
+                          {capability.description}
+                        </p>
+                      </ContentCard>
+                    </Reveal>
+                  );
+                },
+              )}
+            </ContentGrid>
+          </div>
+        </Reveal>
       </Container>
     </Section>
   );

@@ -5,6 +5,7 @@ import { navigation } from "@/content/navigation";
 import { Container } from "@/components/shared/Container";
 
 import { footerVariants } from "./Footer.variants";
+import { Logo } from "./Logo";
 
 export function Footer() {
   return (
@@ -12,16 +13,12 @@ export function Footer() {
       <Container>
         <div className={footerVariants.content}>
           <div className={footerVariants.identity}>
-            <Link
-              href="/"
-              className={footerVariants.logo}
-            >
-              Snowfox
-            </Link>
+            <Logo />
 
             <p className={footerVariants.description}>
-              Canadian-developed AI and automation tools for
-              defence and intelligence organizations.
+              Canadian-developed artificial intelligence
+              and automation solutions supporting defence,
+              intelligence and mission-critical operations.
             </p>
           </div>
 
