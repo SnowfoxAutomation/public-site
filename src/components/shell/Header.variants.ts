@@ -4,23 +4,27 @@ export const headerVariants = {
     "top-0",
     "z-50",
     "border-b",
-    "border-border",
-    "bg-background/90",
-    "backdrop-blur",
+    "border-border/70",
+    "bg-background/85",
+    "backdrop-blur-xl",
+    "supports-[backdrop-filter]:bg-background/75",
   ].join(" "),
 
   content: [
-    "flex",
+    "grid",
     "min-h-20",
+    "grid-cols-[auto_1fr_auto]",
     "items-center",
-    "justify-between",
     "gap-8",
   ].join(" "),
 
-  logo: [
-    "text-2xl",
-    "font-semibold",
-    "tracking-tight",
-    "text-foreground",
+  login: [
+    "justify-self-end",
+    "text-sm",
+    "font-medium",
+    "text-muted-foreground",
+    "transition-colors",
+    "duration-[var(--transition-fast)]",
+    "hover:text-foreground",
   ].join(" "),
 } as const;

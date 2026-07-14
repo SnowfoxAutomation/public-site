@@ -6,12 +6,13 @@ export const aboutSectionVariants = {
   content: [
     "flex",
     "flex-col",
-    "gap-[var(--component-gap-large)]",
+    "gap-[calc(var(--component-gap-large)*1.2)]",
   ].join(" "),
 
   introduction: [
     "max-w-3xl",
     "text-[length:var(--font-size-body-large)]",
+    "leading-[var(--line-height-body)]",
     "text-muted-foreground",
   ].join(" "),
 
@@ -23,6 +24,7 @@ export const aboutSectionVariants = {
   ].join(" "),
 
   cardBody: [
+    "leading-[var(--line-height-body)]",
     "text-muted-foreground",
   ].join(" "),
 } as const;

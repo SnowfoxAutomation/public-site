@@ -12,6 +12,9 @@ export function Hero() {
       aria-labelledby="hero-heading"
       className={heroVariants.section}
     >
+      <div className={heroVariants.grid} />
+      <div className={heroVariants.glow} />
+
       <Container>
         <div className={heroVariants.content}>
           <p className={heroVariants.eyebrow}>

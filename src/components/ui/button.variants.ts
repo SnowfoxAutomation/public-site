@@ -29,29 +29,34 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         primary: [
-          "bg-accent",
-          "text-inverse-foreground",
-          "hover:bg-accent-hover",
+        "bg-accent",
+        "text-inverse-foreground",
+        "shadow-sm",
+        "hover:bg-accent-hover",
+        "hover:shadow-md",
         ].join(" "),
 
         secondary: [
-          "bg-brand",
-          "text-inverse-foreground",
-          "hover:bg-foreground",
+        "bg-brand",
+        "text-inverse-foreground",
+        "shadow-sm",
+        "hover:bg-foreground",
+        "hover:shadow-md",
         ].join(" "),
 
         outline: [
-          "border-border-strong",
-          "bg-background",
-          "text-foreground",
-          "hover:border-brand",
-          "hover:bg-surface-emphasis",
+        "border-border",
+        "bg-background/80",
+        "text-foreground",
+        "backdrop-blur",
+        "hover:border-brand",
+        "hover:bg-surface-emphasis",
         ].join(" "),
 
         ghost: [
-          "bg-transparent",
-          "text-foreground",
-          "hover:bg-surface-muted",
+        "bg-transparent",
+        "text-foreground",
+        "hover:bg-surface-muted",
         ].join(" "),
 
         link: [

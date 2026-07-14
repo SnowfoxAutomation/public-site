@@ -6,13 +6,16 @@ export const productsSectionVariants = {
   content: [
     "flex",
     "flex-col",
-    "gap-[var(--component-gap-large)]",
+    "gap-[calc(var(--component-gap-large)*1.2)]",
   ].join(" "),
 
   icon: [
     "mb-6",
-    "size-8",
+    "size-9",
     "text-brand",
+    "transition-transform",
+    "duration-[var(--transition-standard)]",
+    "group-hover:scale-110",
   ].join(" "),
 
   cardTitle: [
@@ -23,6 +26,7 @@ export const productsSectionVariants = {
   ].join(" "),
 
   cardBody: [
+    "leading-[var(--line-height-body)]",
     "text-muted-foreground",
   ].join(" "),
 } as const;

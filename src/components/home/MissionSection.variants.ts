@@ -6,7 +6,7 @@ export const missionSectionVariants = {
   content: [
     "flex",
     "flex-col",
-    "gap-[var(--component-gap-large)]",
+    "gap-[calc(var(--component-gap-large)*1.2)]",
   ].join(" "),
 
   body: [
@@ -23,6 +23,7 @@ export const missionSectionVariants = {
   ].join(" "),
 
   cardBody: [
+    "leading-[var(--line-height-body)]",
     "text-muted-foreground",
   ].join(" "),
 } as const;
