@@ -1,22 +1,16 @@
 export const contactSectionVariants = {
-  section: [
-    "scroll-mt-20",
-  ].join(" "),
-
   content: [
-    "mx-auto",
     "flex",
-    "max-w-3xl",
     "flex-col",
     "items-center",
-    "gap-[calc(var(--component-gap-large)*1.2)]",
+    "gap-[var(--component-gap-large)]",
     "text-center",
   ].join(" "),
 
-  note: [
-    "max-w-xl",
-    "text-sm",
-    "leading-7",
+  body: [
+    "max-w-2xl",
+    "text-lg",
+    "leading-8",
     "text-muted-foreground",
   ].join(" "),
 } as const;

@@ -1,17 +1,13 @@
 "use server";
 
 import { getClientIp } from "@/lib/contact/clientIp";
-import { contactConfig } from "@/lib/contact/config";
 import { checkContactRateLimit } from "@/lib/contact/rateLimit";
 import { contactSchema } from "@/lib/contact/schema";
 import { sendContactEmail } from "@/lib/contact/sendContactEmail";
 import { verifyTurnstile } from "@/lib/contact/turnstile";
 
 export type ContactActionState = {
-  status:
-    | "idle"
-    | "success"
-    | "error";
+  status: "idle" | "success" | "error";
   message: string;
 };
 
@@ -37,23 +33,9 @@ export async function submitContact(
     subject: formData.get("subject"),
     message: formData.get("message"),
     website: formData.get("website") ?? "",
-    formStartedAt:
-      formData.get("formStartedAt"),
   });
 
   if (!parsed.success) {
-    return errorState();
-  }
-
-  const submissionAge =
-    Date.now() - parsed.data.formStartedAt;
-
-  if (
-    submissionAge <
-      contactConfig.minimumCompletionTimeMs ||
-    submissionAge >
-      contactConfig.maximumCompletionTimeMs
-  ) {
     return errorState();
   }
 
@@ -69,8 +51,7 @@ export async function submitContact(
   }
 
   const turnstileToken = String(
-    formData.get("cf-turnstile-response") ??
-      "",
+    formData.get("cf-turnstile-response") ?? "",
   );
 
   const turnstileValid =

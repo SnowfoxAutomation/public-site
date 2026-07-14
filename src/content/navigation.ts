@@ -1,18 +1,18 @@
 export const navigation = [
   {
     label: "Mission",
-    href: "#mission",
+    href: "/#mission",
   },
   {
     label: "Products",
-    href: "#products",
+    href: "/#products",
   },
   {
     label: "About",
-    href: "#about",
+    href: "/#about",
   },
   {
     label: "Contact",
-    href: "#contact",
+    href: "/contact",
   },
 ] as const;
