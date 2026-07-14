@@ -1,36 +1,309 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Snowfox Automation Public Website
 
-## Getting Started
+The public website for **Snowfox Automation**, a Canadian company developing secure AI and automation solutions for the defence and intelligence sector.
 
-First, run the development server:
+This repository contains the marketing website only. It is intentionally separate from the authenticated application to provide a smaller attack surface, simpler deployment, and independent development.
+
+---
+
+# Technology
+
+- Next.js App Router
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- shadcn/ui
+- React Hook Form
+- Zod
+- Resend
+- Cloudflare Turnstile
+
+---
+
+# Project Goals
+
+The website should:
+
+- communicate the Snowfox mission
+- present company capabilities
+- provide a secure contact workflow
+- establish a professional visual identity
+- load quickly
+- be accessible
+- be SEO friendly
+
+---
+
+# Design Principles
+
+The website should appear:
+
+- Professional
+- Modern
+- Minimal
+- Trustworthy
+- Canadian
+- Security-focused
+
+Avoid generic SaaS styling, excessive animation, and stock illustrations.
+
+---
+
+# Architecture
+
+The project follows a strict separation of responsibilities.
+
+```
+Tokens
+    ↓
+Variants
+    ↓
+Components
+    ↓
+Pages
+```
+
+Server Components are the default.
+
+Client Components are introduced only when browser APIs or interactivity require them.
+
+---
+
+# Folder Structure
+
+```
+src/
+
+app/
+components/
+content/
+config/
+lib/
+styles/
+types/
+```
+
+## Components
+
+```
+components/
+
+shared/
+shell/
+home/
+contact/
+state/
+ui/
+```
+
+Shared components should be reused whenever possible.
+
+Homepage-specific components belong under:
+
+```
+components/home
+```
+
+---
+
+# Styling
+
+Visual styling follows:
+
+```
+Design Tokens
+        ↓
+Variant Files
+        ↓
+Components
+```
+
+Tailwind utility classes belong only inside:
+
+```
+*.variants.ts
+```
+
+Component files should not contain styling logic.
+
+---
+
+# Content
+
+User-facing copy belongs under:
+
+```
+src/content
+```
+
+Components should not hardcode copy.
+
+This allows presentation and content to evolve independently.
+
+---
+
+# Illustrations
+
+Custom artwork is implemented as inline SVG components.
+
+Goals:
+
+- lightweight
+- responsive
+- theme consistent
+- accessible
+- no external illustration libraries
+- no stock artwork
+
+---
+
+# Animation
+
+Animations should be:
+
+- subtle
+- purposeful
+- lightweight
+- GPU friendly
+
+Respect:
+
+```
+prefers-reduced-motion
+```
+
+Animations should degrade gracefully.
+
+---
+
+# Security
+
+The contact form includes:
+
+- React Hook Form validation
+- Zod validation
+- Cloudflare Turnstile
+- Honeypot protection
+- Rate limiting
+- Server Actions
+- Resend email integration
+
+Future improvements include:
+
+- production rate limiting
+- audit logging
+- security headers
+- spam detection
+- abuse protection
+
+---
+
+# Accessibility
+
+Maintain:
+
+- semantic HTML
+- keyboard navigation
+- visible focus states
+- sufficient colour contrast
+- reduced motion support
+
+---
+
+# Performance
+
+Prefer:
+
+- Server Components
+- SVG artwork
+- CSS animations
+- static rendering
+
+Avoid unnecessary client-side JavaScript.
+
+---
+
+# Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Build:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Lint:
 
-## Learn More
+```bash
+npm run lint
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Development Standards
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Preserve the existing architecture.
+- Prefer extending existing shared components.
+- Do not introduce abstractions without clear reuse.
+- Keep components focused on a single responsibility.
+- Keep styling inside variant files.
+- Keep content inside `src/content`.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Definition of Done
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Before a task is complete:
+
+1. Build successfully.
+
+```bash
+npm run build
+```
+
+2. Lint successfully.
+
+```bash
+npm run lint
+```
+
+3. Resolve all errors.
+
+4. Verify:
+
+- responsive layout
+- accessibility
+- reduced-motion support
+
+5. Prepare a Conventional Commit message.
+
+Never report a task complete if the build or lint fails.
+
+---
+
+# Roadmap
+
+Current milestone:
+
+- Snowfox visual identity
+
+Planned milestones:
+
+- Contact form hardening
+- SEO improvements
+- Accessibility improvements
+- Performance optimization
+- Legal pages
+- Blog / News
+- Authentication
