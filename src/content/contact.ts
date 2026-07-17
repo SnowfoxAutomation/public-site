@@ -3,13 +3,13 @@ export const contactContent = {
     eyebrow: "Contact",
     title: "Let’s discuss your mission.",
     description:
-      "Snowfox Automation develops secure AI and automation solutions tailored for Canadian defence and intelligence organizations.",
+      "Snowfox Automation develops secure, intelligent automation tools tailored for Canadian Defence and Intelligence organizations.",
   },
 
   beforeContact: {
     title: "Before contacting us",
     description:
-      "We welcome enquiries regarding automation, artificial intelligence, software engineering and mission support. Please do not include classified, protected, export-controlled or otherwise operationally sensitive information.",
+      "We welcome enquiries regarding automation, artificial intelligence, software engineering and intelligence compliance. Please do not include classified or otherwise sensitive information.",
   },
 
   process: {
@@ -57,7 +57,7 @@ export const contactContent = {
         placeholder:
           "Tell us about your project, challenge or operational requirement.",
         guidance:
-          "Please do not include classified, protected, export-controlled or other operationally sensitive information. Initial discussions should remain at a high level.",
+          "Please do not include classified or other sensitive information. Initial discussions should remain at a high level.",
       },
     },
 
