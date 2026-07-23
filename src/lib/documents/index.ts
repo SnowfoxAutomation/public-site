@@ -34,3 +34,8 @@ export {
   documentInputAccept,
   documentUploadPolicy,
 } from "./upload/acceptedFileTypes";
+export type { DocumentService } from "./api/documentService";
+export {
+  DocumentApiError,
+  parseApiProblem,
+} from "./api/apiError";
