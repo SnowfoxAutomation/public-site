@@ -9,7 +9,7 @@ export const logoVariants = {
   ].join(" "),
 
   image: [
-    "h-10",
+    "h-18",
     "w-auto",
     "select-none",
     "drop-shadow-sm",
