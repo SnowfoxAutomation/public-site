@@ -5,6 +5,7 @@ import { z } from "zod";
 const documentApiConfigSchema = z.object({
   baseUrl: z.url(),
   requestTimeoutMs: z.number().int().positive(),
+  apiToken: z.string().min(1).optional(),
 });
 
 export type DocumentApiConfig = z.infer<
@@ -20,5 +21,8 @@ export function getDocumentApiConfig(): DocumentApiConfig {
       process.env.DOCUMENT_API_TIMEOUT_MS ??
         120_000,
     ),
+    apiToken:
+      process.env.DOCUMENT_API_TOKEN ||
+      undefined,
   });
 }

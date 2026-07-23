@@ -33,6 +33,7 @@ export type UploadQueueItem = {
   uploadPercent: number;
   jobId?: string;
   documentId?: string;
+  clientRequestId?: string;
   validationErrors: FileValidationError[];
   problem?: ApiProblem;
 };

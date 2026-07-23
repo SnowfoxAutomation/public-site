@@ -5,6 +5,7 @@ import {
   documentApiErrorResponse,
 } from "@/lib/documents/api/apiResponse";
 import { serverDocumentClient } from "@/lib/documents/api/serverDocumentClient";
+import { validateDocumentUpload } from "@/lib/documents/upload/serverUploadValidation";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -31,6 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     const formData = await request.formData();
+    validateDocumentUpload(formData);
     const response =
       await serverDocumentClient.createJob(
         formData,

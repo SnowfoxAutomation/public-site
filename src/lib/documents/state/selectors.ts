@@ -8,6 +8,35 @@ export function selectReadyItems(
   );
 }
 
+export function selectSubmissionItems(
+  state: Pick<UploadState, "items">,
+) {
+  const readyItems = selectReadyItems(state);
+
+  if (readyItems.length > 0) {
+    return readyItems;
+  }
+
+  const retryableItem = state.items.find(
+    ({ status, problem, clientRequestId }) =>
+      status === "failed" &&
+      problem?.retryable &&
+      Boolean(clientRequestId),
+  );
+
+  if (!retryableItem?.clientRequestId) {
+    return [];
+  }
+
+  return state.items.filter(
+    ({ status, problem, clientRequestId }) =>
+      status === "failed" &&
+      problem?.retryable &&
+      clientRequestId ===
+        retryableItem.clientRequestId,
+  );
+}
+
 export function selectTotalBytes(
   state: Pick<UploadState, "items">,
 ) {

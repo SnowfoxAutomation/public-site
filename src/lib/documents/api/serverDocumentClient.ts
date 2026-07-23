@@ -42,6 +42,22 @@ function createBackendUrl(path: string) {
   return new URL(path, `${baseUrl}/`);
 }
 
+function createBackendHeaders(
+  headers?: HeadersInit,
+) {
+  const { apiToken } = getDocumentApiConfig();
+  const requestHeaders = new Headers(headers);
+
+  if (apiToken) {
+    requestHeaders.set(
+      "Authorization",
+      `Bearer ${apiToken}`,
+    );
+  }
+
+  return requestHeaders;
+}
+
 async function parseBackendResponse<T>(
   response: Response,
   parser: (value: unknown) => T,
@@ -78,6 +94,9 @@ async function requestDocumentApi<T>(
     {
       ...init,
       cache: "no-store",
+      headers: createBackendHeaders(
+        init.headers,
+      ),
       signal: createRequestSignal(init.signal),
     },
   );

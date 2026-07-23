@@ -17,7 +17,7 @@ import {
   DocumentApiError,
   parseApiProblem,
 } from "@/lib/documents/api/apiError";
-import { selectReadyItems } from "@/lib/documents/state/selectors";
+import { selectSubmissionItems } from "@/lib/documents/state/selectors";
 import { pollingJobUpdates } from "@/lib/documents/updates/pollingJobUpdates";
 
 import { documentWorkspaceVariants } from "./DocumentWorkspace.variants";
@@ -199,7 +199,8 @@ export function DocumentWorkspace() {
   }
 
   async function submitFiles() {
-    const readyItems = selectReadyItems(state);
+    const readyItems =
+      selectSubmissionItems(state);
 
     if (readyItems.length === 0) {
       return;
@@ -209,18 +210,22 @@ export function DocumentWorkspace() {
       ({ localId }) => localId,
     );
     const controller = new AbortController();
+    const clientRequestId =
+      readyItems[0]?.clientRequestId ??
+      crypto.randomUUID();
 
     uploadController.current = controller;
     dispatch({
       type: "upload_started",
       localIds,
+      clientRequestId,
     });
 
     try {
       const job =
         await browserDocumentClient.createJob(
           {
-            clientRequestId: crypto.randomUUID(),
+            clientRequestId,
             files: readyItems.map(
               ({ localId, file }) => ({
                 clientFileId: localId,

@@ -33,6 +33,7 @@ export const documentsContent = {
     removeLabel: "Remove",
     clearLabel: "Clear queue",
     submitLabel: "Submit for processing",
+    retryLabel: "Retry upload",
     submittingLabel: "Uploading documents...",
     cancelLabel: "Cancel upload",
     submissionError:

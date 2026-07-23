@@ -176,6 +176,57 @@ Animations should degrade gracefully.
 
 ---
 
+# Document Processing
+
+The `/documents` route provides a public preview of the document-processing workspace. It supports multiple-file selection, upload progress, asynchronous job status, cancellation and structured result rendering.
+
+Supported formats are configured centrally and currently include:
+
+- PDF
+- DOC and DOCX
+- TXT and CSV
+- XLS and XLSX
+- JPG, JPEG, PNG and TIFF
+
+The browser communicates only with same-origin Next.js endpoints under:
+
+```text
+/api/document-jobs
+```
+
+The Next.js API boundary validates upload limits and backend responses, then communicates with the separately deployed document service. The Python service location and credentials remain server-only:
+
+```bash
+DOCUMENT_API_BASE_URL=http://127.0.0.1:8000
+DOCUMENT_API_TIMEOUT_MS=120000
+DOCUMENT_API_TOKEN=
+```
+
+The initial backend contract is asynchronous:
+
+```text
+POST /v1/document-jobs
+GET  /v1/document-jobs/{job_id}
+GET  /v1/document-jobs/{job_id}/results
+POST /v1/document-jobs/{job_id}/cancel
+```
+
+Job creation uses `multipart/form-data` with repeated `files` parts, `client_request_id`, optional JSON `options`, and a JSON `file_manifest`. Each manifest entry contains the corresponding `client_file_id` and filename.
+
+The backend must independently verify file signatures, sizes and content. Client and gateway checks are usability and defence-in-depth controls, not substitutes for malware scanning, parser isolation, authorization, secure retention or an approved data-handling environment.
+
+Do not upload classified, protected, export-controlled, personal or operationally sensitive information while this route remains unauthenticated.
+
+## Deployment
+
+For local development, run the Python service separately and configure `DOCUMENT_API_BASE_URL` in `.env.local`.
+
+For Docker or cloud deployment, provide the internal service URL through the same environment variable. Do not bake backend URLs or service tokens into the frontend image. The browser continues using the same-origin API regardless of whether the Python service runs locally, in another container, or as a managed cloud service.
+
+Large production uploads should move to short-lived presigned object-storage URLs through the existing upload transport abstraction rather than increasing proxy limits indefinitely.
+
+---
+
 # Security
 
 The contact form includes:
@@ -249,6 +300,12 @@ Lint:
 npm run lint
 ```
 
+Test:
+
+```bash
+npm run test
+```
+
 ---
 
 # Development Standards
@@ -280,13 +337,19 @@ npm run lint
 
 3. Resolve all errors.
 
-4. Verify:
+4. Run automated tests.
+
+```bash
+npm run test
+```
+
+5. Verify:
 
 - responsive layout
 - accessibility
 - reduced-motion support
 
-5. Prepare a Conventional Commit message.
+6. Prepare a Conventional Commit message.
 
 Never report a task complete if the build or lint fails.
 

@@ -5,7 +5,7 @@ import { documentsContent } from "@/content/documents";
 import type { UploadQueueItem as UploadQueueItemType } from "@/lib/documents/state/uploadState";
 import {
   selectHasActiveUpload,
-  selectReadyItems,
+  selectSubmissionItems,
 } from "@/lib/documents/state/selectors";
 
 import { UploadQueueItem } from "./UploadQueueItem";
@@ -27,7 +27,8 @@ export function UploadQueue({
   onCancel,
 }: UploadQueueProps) {
   const state = { items: [...items] };
-  const readyItems = selectReadyItems(state);
+  const submissionItems =
+    selectSubmissionItems(state);
   const hasActiveUpload =
     selectHasActiveUpload(state);
 
@@ -112,10 +113,19 @@ export function UploadQueue({
               ) : (
                 <Button
                   type="button"
-                  disabled={readyItems.length === 0}
+                  disabled={
+                    submissionItems.length === 0
+                  }
                   onClick={onSubmit}
                 >
-                  {documentsContent.queue.submitLabel}
+                  {submissionItems.some(
+                    ({ status }) =>
+                      status === "failed",
+                  )
+                    ? documentsContent.queue
+                        .retryLabel
+                    : documentsContent.queue
+                        .submitLabel}
                 </Button>
               )}
             </div>

@@ -25,6 +25,7 @@ export type UploadAction =
   | {
       type: "upload_started";
       localIds: string[];
+      clientRequestId: string;
     }
   | {
       type: "upload_progressed";
@@ -105,6 +106,8 @@ export function uploadReducer(
           uploadedBytes: 0,
           uploadPercent: 0,
           problem: undefined,
+          clientRequestId:
+            action.clientRequestId,
         }),
       );
 

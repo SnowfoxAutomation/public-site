@@ -53,6 +53,15 @@ export function backendJsonResponse({
     );
   }
 
+  response.headers.set(
+    "Cache-Control",
+    "no-store",
+  );
+  response.headers.set(
+    "X-Content-Type-Options",
+    "nosniff",
+  );
+
   return response;
 }
 
@@ -60,10 +69,20 @@ export function documentApiErrorResponse(
   error: unknown,
 ) {
   if (error instanceof DocumentApiError) {
-    return NextResponse.json(
+    const response = NextResponse.json(
       serializeProblem(error.problem),
       { status: error.problem.status },
     );
+    response.headers.set(
+      "Cache-Control",
+      "no-store",
+    );
+    response.headers.set(
+      "X-Content-Type-Options",
+      "nosniff",
+    );
+
+    return response;
   }
 
   const problem =
@@ -76,8 +95,15 @@ export function documentApiErrorResponse(
         }
       : internalProblem;
 
-  return NextResponse.json(
+  const response = NextResponse.json(
     serializeProblem(problem),
     { status: problem.status },
   );
+  response.headers.set("Cache-Control", "no-store");
+  response.headers.set(
+    "X-Content-Type-Options",
+    "nosniff",
+  );
+
+  return response;
 }
