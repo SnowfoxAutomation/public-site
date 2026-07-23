@@ -1,0 +1,44 @@
+import type { ApiProblem } from "../contracts/common";
+
+export type FileValidationErrorCode =
+  | "unsupported_file_type"
+  | "file_too_large"
+  | "too_many_files"
+  | "batch_too_large"
+  | "duplicate_file"
+  | "empty_file";
+
+export type FileValidationError = {
+  code: FileValidationErrorCode;
+  message: string;
+};
+
+export type UploadQueueItemStatus =
+  | "ready"
+  | "invalid"
+  | "uploading"
+  | "submitted"
+  | "processing"
+  | "completed"
+  | "failed"
+  | "cancelled";
+
+export type UploadQueueItem = {
+  localId: string;
+  file: File;
+  status: UploadQueueItemStatus;
+  uploadedBytes: number;
+  uploadPercent: number;
+  jobId?: string;
+  documentId?: string;
+  validationErrors: FileValidationError[];
+  problem?: ApiProblem;
+};
+
+export type UploadState = {
+  items: UploadQueueItem[];
+};
+
+export const initialUploadState: UploadState = {
+  items: [],
+};

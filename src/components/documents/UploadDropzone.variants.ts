@@ -1,0 +1,48 @@
+export const uploadDropzoneVariants = {
+  root: [
+    "flex",
+    "min-h-80",
+    "flex-col",
+    "items-center",
+    "justify-center",
+    "rounded-[var(--radius-large)]",
+    "border-2",
+    "border-dashed",
+    "border-border-strong",
+    "bg-surface",
+    "p-8",
+    "text-center",
+    "transition-[border-color,background-color]",
+    "duration-[var(--transition-standard)]",
+    "focus-within:border-brand",
+  ].join(" "),
+  dragging: [
+    "border-brand",
+    "bg-surface-emphasis",
+  ].join(" "),
+  icon: [
+    "mb-5",
+    "size-12",
+    "text-brand",
+  ].join(" "),
+  title: [
+    "text-xl",
+    "font-semibold",
+    "text-foreground",
+  ].join(" "),
+  description: [
+    "mt-2",
+    "max-w-md",
+    "leading-7",
+    "text-muted-foreground",
+  ].join(" "),
+  browse: ["mt-6"].join(" "),
+  guidance: [
+    "mt-5",
+    "max-w-md",
+    "text-sm",
+    "leading-6",
+    "text-muted-foreground",
+  ].join(" "),
+  input: ["sr-only"].join(" "),
+} as const;
