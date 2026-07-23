@@ -40,3 +40,7 @@ export {
   parseApiProblem,
 } from "./api/apiError";
 export type { UploadTransport } from "./upload/uploadTransport";
+export type {
+  JobUpdateHandlers,
+  JobUpdatesTransport,
+} from "./updates/jobUpdatesTransport";

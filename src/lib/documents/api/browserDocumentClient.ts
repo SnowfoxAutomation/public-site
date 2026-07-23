@@ -15,7 +15,7 @@ import {
   parseApiProblem,
 } from "./apiError";
 
-async function requestJson<T>(
+async function requestJsonResponse<T>(
   path: string,
   init: RequestInit,
   parser: (payload: unknown) => T,
@@ -39,7 +39,12 @@ async function requestJson<T>(
   }
 
   try {
-    return parser(payload);
+    return {
+      data: parser(payload),
+      retryAfter: response.headers.get(
+        "retry-after",
+      ),
+    };
   } catch {
     throw new DocumentApiError(
       parseApiProblem(
@@ -57,6 +62,20 @@ async function requestJson<T>(
       ),
     );
   }
+}
+
+async function requestJson<T>(
+  path: string,
+  init: RequestInit,
+  parser: (payload: unknown) => T,
+) {
+  const response = await requestJsonResponse(
+    path,
+    init,
+    parser,
+  );
+
+  return response.data;
 }
 
 function jobPath(jobId: string) {
@@ -84,6 +103,17 @@ export class BrowserDocumentClient
     signal?: AbortSignal,
   ): Promise<DocumentJob> {
     return requestJson(
+      jobPath(jobId),
+      { method: "GET", signal },
+      (payload) => documentJobSchema.parse(payload),
+    );
+  }
+
+  getJobUpdate(
+    jobId: string,
+    signal?: AbortSignal,
+  ) {
+    return requestJsonResponse(
       jobPath(jobId),
       { method: "GET", signal },
       (payload) => documentJobSchema.parse(payload),

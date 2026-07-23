@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useEffect,
   useReducer,
   useRef,
   useState,
@@ -16,10 +17,12 @@ import {
   parseApiProblem,
 } from "@/lib/documents/api/apiError";
 import { selectReadyItems } from "@/lib/documents/state/selectors";
+import { pollingJobUpdates } from "@/lib/documents/updates/pollingJobUpdates";
 
 import { documentWorkspaceVariants } from "./DocumentWorkspace.variants";
 import { UploadDropzone } from "./UploadDropzone";
 import { UploadQueue } from "./UploadQueue";
+import { JobStatus } from "./JobStatus";
 
 export function DocumentWorkspace() {
   const [state, dispatch] = useReducer(
@@ -30,6 +33,65 @@ export function DocumentWorkspace() {
     useState("");
   const uploadController =
     useRef<AbortController | null>(null);
+  const watchedJobs = useRef(
+    new Map<string, AbortController>(),
+  );
+  const [cancellingJobId, setCancellingJobId] =
+    useState<string | null>(null);
+
+  useEffect(() => {
+    const controllers = watchedJobs.current;
+    const activeStatuses = new Set([
+      "queued",
+      "uploading",
+      "processing",
+    ]);
+
+    state.jobs.forEach(({ job }) => {
+      if (
+        !activeStatuses.has(job.status) ||
+        controllers.has(job.jobId)
+      ) {
+        return;
+      }
+
+      const controller = new AbortController();
+      controllers.set(job.jobId, controller);
+
+      void pollingJobUpdates
+        .watchJob(
+          job.jobId,
+          {
+            onUpdate: (updatedJob) =>
+              dispatch({
+                type: "job_updated",
+                job: updatedJob,
+              }),
+            onError: (problem) =>
+              dispatch({
+                type: "job_update_failed",
+                jobId: job.jobId,
+                problem,
+              }),
+          },
+          controller.signal,
+        )
+        .finally(() => {
+          controllers.delete(job.jobId);
+        });
+    });
+  }, [state.jobs]);
+
+  useEffect(() => {
+    const controllers = watchedJobs.current;
+
+    return () => {
+      controllers.forEach((controller) =>
+        controller.abort(),
+      );
+      controllers.clear();
+    };
+  }, []);
 
   function addFiles(files: readonly File[]) {
     if (files.length === 0) {
@@ -45,6 +107,30 @@ export function DocumentWorkspace() {
     setAnnouncement(
       documentsContent.upload.selectedAnnouncement,
     );
+  }
+
+  async function cancelJob(jobId: string) {
+    setCancellingJobId(jobId);
+
+    try {
+      const job =
+        await browserDocumentClient.cancelJob(jobId);
+      watchedJobs.current.get(jobId)?.abort();
+      dispatch({ type: "job_updated", job });
+    } catch (error) {
+      const problem =
+        error instanceof DocumentApiError
+          ? error.problem
+          : parseApiProblem(null, 503);
+
+      dispatch({
+        type: "job_update_failed",
+        jobId,
+        problem,
+      });
+    } finally {
+      setCancellingJobId(null);
+    }
   }
 
   async function submitFiles() {
@@ -156,6 +242,18 @@ export function DocumentWorkspace() {
           dispatch({ type: "queue_cleared" })
         }
       />
+
+      <div
+        className={documentWorkspaceVariants.jobs}
+      >
+        <JobStatus
+          jobs={state.jobs}
+          cancellingJobId={cancellingJobId}
+          onCancel={(jobId) =>
+            void cancelJob(jobId)
+          }
+        />
+      </div>
     </div>
   );
 }

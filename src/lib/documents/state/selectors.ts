@@ -1,7 +1,7 @@
 import type { UploadState } from "./uploadState";
 
 export function selectReadyItems(
-  state: UploadState,
+  state: Pick<UploadState, "items">,
 ) {
   return state.items.filter(
     ({ status }) => status === "ready",
@@ -9,7 +9,7 @@ export function selectReadyItems(
 }
 
 export function selectTotalBytes(
-  state: UploadState,
+  state: Pick<UploadState, "items">,
 ) {
   return state.items.reduce(
     (total, { file }) => total + file.size,
@@ -18,13 +18,9 @@ export function selectTotalBytes(
 }
 
 export function selectHasActiveUpload(
-  state: UploadState,
+  state: Pick<UploadState, "items">,
 ) {
-  return state.items.some(({ status }) =>
-    [
-      "uploading",
-      "submitted",
-      "processing",
-    ].includes(status),
+  return state.items.some(
+    ({ status }) => status === "uploading",
   );
 }

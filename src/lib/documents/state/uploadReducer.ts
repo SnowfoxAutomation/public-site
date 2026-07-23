@@ -4,6 +4,7 @@ import type {
 } from "./uploadState";
 import type {
   ApiProblem,
+  DocumentStatus,
 } from "../contracts/common";
 import type {
   DocumentJob,
@@ -42,6 +43,15 @@ export type UploadAction =
   | {
       type: "upload_cancelled";
       localIds: string[];
+    }
+  | {
+      type: "job_updated";
+      job: DocumentJob;
+    }
+  | {
+      type: "job_update_failed";
+      jobId: string;
+      problem: ApiProblem;
     };
 
 export function uploadReducer(
@@ -98,7 +108,8 @@ export function uploadReducer(
       );
 
     case "job_created":
-      return updateItems(
+      return {
+        ...updateItems(
         state,
         action.localIds,
         (item) => {
@@ -117,7 +128,12 @@ export function uploadReducer(
             documentId: document?.documentId,
           };
         },
-      );
+      ),
+        jobs: [
+          ...state.jobs,
+          { job: action.job },
+        ],
+      };
 
     case "upload_failed":
       return updateItems(
@@ -139,6 +155,89 @@ export function uploadReducer(
           status: "cancelled",
         }),
       );
+
+    case "job_updated":
+      return {
+        ...state,
+        jobs: state.jobs.map((jobState) =>
+          jobState.job.jobId === action.job.jobId
+            ? { job: action.job }
+            : jobState,
+        ),
+        items: state.items.map((item) => {
+          if (item.jobId !== action.job.jobId) {
+            return item;
+          }
+
+          const document =
+            action.job.documents.find(
+              ({ documentId }) =>
+                documentId === item.documentId,
+            );
+
+          return {
+            ...item,
+            status:
+              document
+                ? mapDocumentStatus(
+                    document.status,
+                  )
+                : mapJobStatus(
+                    action.job.status,
+                  ),
+            problem: document?.error,
+          };
+        }),
+      };
+
+    case "job_update_failed":
+      return {
+        ...state,
+        jobs: state.jobs.map((jobState) =>
+          jobState.job.jobId === action.jobId
+            ? {
+                ...jobState,
+                updateProblem: action.problem,
+              }
+            : jobState,
+        ),
+      };
+  }
+}
+
+function mapDocumentStatus(
+  status: DocumentStatus,
+): UploadQueueItem["status"] {
+  switch (status) {
+    case "queued":
+      return "submitted";
+    case "processing":
+      return "processing";
+    case "completed":
+      return "completed";
+    case "failed":
+      return "failed";
+    case "cancelled":
+      return "cancelled";
+  }
+}
+
+function mapJobStatus(
+  status: DocumentJob["status"],
+): UploadQueueItem["status"] {
+  switch (status) {
+    case "queued":
+    case "uploading":
+      return "submitted";
+    case "processing":
+      return "processing";
+    case "completed":
+    case "partially_completed":
+      return "completed";
+    case "failed":
+      return "failed";
+    case "cancelled":
+      return "cancelled";
   }
 }
 

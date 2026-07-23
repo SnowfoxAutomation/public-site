@@ -48,8 +48,10 @@ export function UploadQueueItem({
       documentsContent.queue.uploadingLabel,
     submitted:
       documentsContent.queue.uploadedLabel,
-    processing: "Processing",
-    completed: "Completed",
+    processing:
+      documentsContent.queue.processingLabel,
+    completed:
+      documentsContent.queue.completedLabel,
     failed: documentsContent.queue.failedLabel,
     cancelled:
       documentsContent.queue.cancelledLabel,

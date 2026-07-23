@@ -41,8 +41,25 @@ export const documentsContent = {
     uploadedLabel: "Submitted",
     uploadingLabel: "Uploading",
     failedLabel: "Upload failed",
+    processingLabel: "Processing",
+    completedLabel: "Completed",
     readyLabel: "Ready",
     invalidLabel: "Needs attention",
+  },
+  jobs: {
+    title: "Processing jobs",
+    queuedLabel: "Queued",
+    uploadingLabel: "Uploading",
+    processingLabel: "Processing",
+    completedLabel: "Completed",
+    partiallyCompletedLabel:
+      "Partially completed",
+    failedLabel: "Failed",
+    cancelledLabel: "Cancelled",
+    cancelLabel: "Cancel job",
+    cancellingLabel: "Cancelling...",
+    progressLabel: "Processing progress",
+    documentsLabel: "documents",
   },
   validation: {
     unsupportedType:

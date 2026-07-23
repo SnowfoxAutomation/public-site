@@ -6,4 +6,5 @@ export const documentWorkspaceVariants = {
     "items-start",
   ].join(" "),
   announcement: ["sr-only"].join(" "),
+  jobs: ["xl:col-span-2"].join(" "),
 } as const;
