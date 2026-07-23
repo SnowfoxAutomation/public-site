@@ -1,5 +1,6 @@
 import type { ApiProblem } from "../contracts/common";
 import type { DocumentJob } from "../contracts/jobs";
+import type { DocumentJobResults } from "../contracts/results";
 
 export type FileValidationErrorCode =
   | "unsupported_file_type"
@@ -44,6 +45,13 @@ export type UploadState = {
 export type DocumentJobState = {
   job: DocumentJob;
   updateProblem?: ApiProblem;
+  resultsStatus:
+    | "idle"
+    | "loading"
+    | "loaded"
+    | "failed";
+  results?: DocumentJobResults;
+  resultsProblem?: ApiProblem;
 };
 
 export const initialUploadState: UploadState = {

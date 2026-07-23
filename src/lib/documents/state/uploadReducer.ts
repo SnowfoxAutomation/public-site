@@ -10,6 +10,7 @@ import type {
   DocumentJob,
   UploadProgress,
 } from "../contracts/jobs";
+import type { DocumentJobResults } from "../contracts/results";
 
 export type UploadAction =
   | {
@@ -50,6 +51,20 @@ export type UploadAction =
     }
   | {
       type: "job_update_failed";
+      jobId: string;
+      problem: ApiProblem;
+    }
+  | {
+      type: "results_started";
+      jobId: string;
+    }
+  | {
+      type: "results_loaded";
+      jobId: string;
+      results: DocumentJobResults;
+    }
+  | {
+      type: "results_failed";
       jobId: string;
       problem: ApiProblem;
     };
@@ -131,7 +146,10 @@ export function uploadReducer(
       ),
         jobs: [
           ...state.jobs,
-          { job: action.job },
+          {
+            job: action.job,
+            resultsStatus: "idle",
+          },
         ],
       };
 
@@ -161,7 +179,11 @@ export function uploadReducer(
         ...state,
         jobs: state.jobs.map((jobState) =>
           jobState.job.jobId === action.job.jobId
-            ? { job: action.job }
+            ? {
+                ...jobState,
+                job: action.job,
+                updateProblem: undefined,
+              }
             : jobState,
         ),
         items: state.items.map((item) => {
@@ -202,7 +224,58 @@ export function uploadReducer(
             : jobState,
         ),
       };
+
+    case "results_started":
+      return updateJobState(
+        state,
+        action.jobId,
+        (jobState) => ({
+          ...jobState,
+          resultsStatus: "loading",
+          resultsProblem: undefined,
+        }),
+      );
+
+    case "results_loaded":
+      return updateJobState(
+        state,
+        action.jobId,
+        (jobState) => ({
+          ...jobState,
+          resultsStatus: "loaded",
+          results: action.results,
+          resultsProblem: undefined,
+        }),
+      );
+
+    case "results_failed":
+      return updateJobState(
+        state,
+        action.jobId,
+        (jobState) => ({
+          ...jobState,
+          resultsStatus: "failed",
+          resultsProblem: action.problem,
+        }),
+      );
   }
+}
+
+function updateJobState(
+  state: UploadState,
+  jobId: string,
+  update: (
+    jobState: UploadState["jobs"][number],
+  ) => UploadState["jobs"][number],
+): UploadState {
+  return {
+    ...state,
+    jobs: state.jobs.map((jobState) =>
+      jobState.job.jobId === jobId
+        ? update(jobState)
+        : jobState,
+    ),
+  };
 }
 
 function mapDocumentStatus(

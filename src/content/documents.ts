@@ -61,6 +61,23 @@ export const documentsContent = {
     progressLabel: "Processing progress",
     documentsLabel: "documents",
   },
+  results: {
+    title: "Processing results",
+    loadingLabel: "Loading structured results...",
+    retryLabel: "Retry results",
+    unavailableTitle: "Results unavailable",
+    documentErrorTitle:
+      "This document could not be processed",
+    summaryTitle: "Summary",
+    confidenceLabel: "Confidence",
+    warningsTitle: "Warnings",
+    metadataTitle: "Metadata",
+    extractedDataTitle: "Extracted data",
+    rawJsonTitle: "Raw JSON",
+    emptyValue: "No value",
+    emptyCollection: "No data returned",
+    additionalRows: "Additional rows are not shown.",
+  },
   validation: {
     unsupportedType:
       "This file type is not supported.",

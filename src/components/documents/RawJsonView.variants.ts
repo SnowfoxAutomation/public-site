@@ -1,0 +1,31 @@
+export const rawJsonViewVariants = {
+  details: [
+    "rounded-[var(--radius-small)]",
+    "border",
+    "border-border",
+    "bg-surface-muted",
+    "p-4",
+  ].join(" "),
+  summary: [
+    "cursor-pointer",
+    "font-semibold",
+    "text-foreground",
+    "focus-visible:outline-none",
+    "focus-visible:ring-3",
+    "focus-visible:ring-accent/30",
+  ].join(" "),
+  code: [
+    "mt-4",
+    "block",
+    "max-h-96",
+    "overflow-auto",
+    "whitespace-pre",
+    "rounded-[var(--radius-small)]",
+    "bg-foreground",
+    "p-4",
+    "font-mono",
+    "text-xs",
+    "leading-5",
+    "text-inverse-foreground",
+  ].join(" "),
+} as const;

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useCallback,
   useEffect,
   useReducer,
   useRef,
@@ -23,6 +24,7 @@ import { documentWorkspaceVariants } from "./DocumentWorkspace.variants";
 import { UploadDropzone } from "./UploadDropzone";
 import { UploadQueue } from "./UploadQueue";
 import { JobStatus } from "./JobStatus";
+import { JobResults } from "./JobResults";
 
 export function DocumentWorkspace() {
   const [state, dispatch] = useReducer(
@@ -38,6 +40,42 @@ export function DocumentWorkspace() {
   );
   const [cancellingJobId, setCancellingJobId] =
     useState<string | null>(null);
+  const requestedResults = useRef(
+    new Set<string>(),
+  );
+
+  const loadResults = useCallback(
+    async (jobId: string) => {
+      dispatch({
+        type: "results_started",
+        jobId,
+      });
+
+      try {
+        const results =
+          await browserDocumentClient.getResults(
+            jobId,
+          );
+        dispatch({
+          type: "results_loaded",
+          jobId,
+          results,
+        });
+      } catch (error) {
+        const problem =
+          error instanceof DocumentApiError
+            ? error.problem
+            : parseApiProblem(null, 503);
+
+        dispatch({
+          type: "results_failed",
+          jobId,
+          problem,
+        });
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     const controllers = watchedJobs.current;
@@ -93,6 +131,28 @@ export function DocumentWorkspace() {
     };
   }, []);
 
+  useEffect(() => {
+    state.jobs.forEach(
+      ({ job, resultsStatus }) => {
+        const hasResults =
+          job.status === "completed" ||
+          job.status ===
+            "partially_completed";
+
+        if (
+          !hasResults ||
+          resultsStatus !== "idle" ||
+          requestedResults.current.has(job.jobId)
+        ) {
+          return;
+        }
+
+        requestedResults.current.add(job.jobId);
+        void loadResults(job.jobId);
+      },
+    );
+  }, [loadResults, state.jobs]);
+
   function addFiles(files: readonly File[]) {
     if (files.length === 0) {
       return;
@@ -131,6 +191,11 @@ export function DocumentWorkspace() {
     } finally {
       setCancellingJobId(null);
     }
+  }
+
+  function retryResults(jobId: string) {
+    requestedResults.current.add(jobId);
+    void loadResults(jobId);
   }
 
   async function submitFiles() {
@@ -252,6 +317,15 @@ export function DocumentWorkspace() {
           onCancel={(jobId) =>
             void cancelJob(jobId)
           }
+        />
+      </div>
+
+      <div
+        className={documentWorkspaceVariants.jobs}
+      >
+        <JobResults
+          jobs={state.jobs}
+          onRetry={retryResults}
         />
       </div>
     </div>
