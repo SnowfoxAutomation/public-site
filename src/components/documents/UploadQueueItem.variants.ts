@@ -49,6 +49,23 @@ export const uploadQueueItemVariants = {
     "leading-5",
     "text-destructive",
   ].join(" "),
+  progress: [
+    "mt-3",
+    "h-2",
+    "w-full",
+    "overflow-hidden",
+    "rounded-[var(--radius-pill)]",
+    "bg-border",
+    "[&::-webkit-progress-bar]:bg-border",
+    "[&::-webkit-progress-value]:bg-brand",
+    "[&::-moz-progress-bar]:bg-brand",
+  ].join(" "),
+  problem: [
+    "mt-2",
+    "text-xs",
+    "leading-5",
+    "text-destructive",
+  ].join(" "),
   remove: [
     "shrink-0",
     "text-muted-foreground",

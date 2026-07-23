@@ -39,3 +39,4 @@ export {
   DocumentApiError,
   parseApiProblem,
 } from "./api/apiError";
+export type { UploadTransport } from "./upload/uploadTransport";

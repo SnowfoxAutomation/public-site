@@ -39,6 +39,21 @@ export function UploadQueueItem({
   const Icon = isInvalid
     ? AlertTriangle
     : FileText;
+  const isUploading = item.status === "uploading";
+
+  const statusLabel = {
+    ready: documentsContent.queue.readyLabel,
+    invalid: documentsContent.queue.invalidLabel,
+    uploading:
+      documentsContent.queue.uploadingLabel,
+    submitted:
+      documentsContent.queue.uploadedLabel,
+    processing: "Processing",
+    completed: "Completed",
+    failed: documentsContent.queue.failedLabel,
+    cancelled:
+      documentsContent.queue.cancelledLabel,
+  }[item.status];
 
   return (
     <li
@@ -84,10 +99,21 @@ export function UploadQueueItem({
                 uploadQueueItemVariants.errorStatus,
             )}
           >
-            {isInvalid
-              ? documentsContent.queue.invalidLabel
-              : documentsContent.queue.readyLabel}
+            {statusLabel}
           </p>
+
+          {isUploading ? (
+            <progress
+              className={
+                uploadQueueItemVariants.progress
+              }
+              aria-label={`Uploading ${item.file.name}`}
+              max={100}
+              value={item.uploadPercent}
+            >
+              {item.uploadPercent}%
+            </progress>
+          ) : null}
 
           {item.validationErrors.length > 0 ? (
             <ul
@@ -102,6 +128,17 @@ export function UploadQueueItem({
               ))}
             </ul>
           ) : null}
+
+          {item.problem ? (
+            <p
+              role="alert"
+              className={
+                uploadQueueItemVariants.problem
+              }
+            >
+              {item.problem.detail}
+            </p>
+          ) : null}
         </div>
 
         <Button
@@ -111,6 +148,7 @@ export function UploadQueueItem({
           className={uploadQueueItemVariants.remove}
           aria-label={`${documentsContent.queue.removeLabel} ${item.file.name}`}
           onClick={() => onRemove(item.localId)}
+          disabled={isUploading}
         >
           <X aria-hidden="true" />
         </Button>

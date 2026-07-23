@@ -33,8 +33,14 @@ export const documentsContent = {
     removeLabel: "Remove",
     clearLabel: "Clear queue",
     submitLabel: "Submit for processing",
-    pendingAvailability:
-      "Backend submission will be enabled in the next implementation milestone.",
+    submittingLabel: "Uploading documents...",
+    cancelLabel: "Cancel upload",
+    submissionError:
+      "The documents could not be submitted.",
+    cancelledLabel: "Upload cancelled",
+    uploadedLabel: "Submitted",
+    uploadingLabel: "Uploading",
+    failedLabel: "Upload failed",
     readyLabel: "Ready",
     invalidLabel: "Needs attention",
   },
