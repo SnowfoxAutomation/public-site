@@ -342,12 +342,13 @@ npm run test
 ```
 
 5. Verify:
+4. Verify:
 
 - responsive layout
 - accessibility
 - reduced-motion support
 
-6. Prepare a Conventional Commit message.
+5. Prepare a Conventional Commit message.
 
 Never report a task complete if the build or lint fails.
 
@@ -355,9 +356,12 @@ Never report a task complete if the build or lint fails.
 
 # Roadmap
 
-Future priorities:
+Current milestone:
 
 - Snowfox visual identity
+
+Planned milestones:
+
 - Contact form hardening
 - SEO improvements
 - Accessibility improvements
