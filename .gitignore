@@ -1,3 +1,6 @@
+# Local backend (cloned as-is, not tracked in this repository)
+backend-local/
+
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
