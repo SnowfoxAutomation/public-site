@@ -20,6 +20,7 @@ import type {
   ResultTable,
   ResultWarning,
 } from "./results";
+import type { DocumentAnalysis } from "./analysis";
 
 const jsonPrimitiveSchema = z.union([
   z.string(),
@@ -246,4 +247,75 @@ export const documentJobResultsSchema: z.ZodType<DocumentJobResults> =
       status: results.status,
       completedAt: results.completed_at,
       documents: results.documents,
+    }));
+
+const piiFindingSchema = z
+  .object({
+    entity_type: z.string().min(1),
+    text: z.string(),
+    start: z.number().int().nonnegative(),
+    end: z.number().int().nonnegative(),
+    score: z.number().min(0).max(1),
+  })
+  .refine(({ start, end }) => end >= start, {
+    message:
+      "Finding end offset cannot precede its start offset.",
+    path: ["end"],
+  })
+  .transform((finding) => ({
+    entityType: finding.entity_type,
+    text: finding.text,
+    start: finding.start,
+    end: finding.end,
+    score: finding.score,
+  }));
+
+export const documentAnalysisSchema: z.ZodType<DocumentAnalysis> =
+  z
+    .object({
+      source: z.string().nullable(),
+      warning: z.string().min(1).optional(),
+      report: z.object({
+        summary: z.object({
+          total_findings: z
+            .number()
+            .int()
+            .nonnegative(),
+          by_entity_type: z.record(
+            z.string(),
+            z.number().int().nonnegative(),
+          ),
+          characters_scanned: z
+            .number()
+            .int()
+            .nonnegative(),
+        }),
+        findings: z.array(piiFindingSchema),
+      }),
+      tagged_text: z.string(),
+      html: z.string(),
+    })
+    .refine(
+      ({ report }) =>
+        report.summary.total_findings ===
+        report.findings.length,
+      {
+        message:
+          "Finding count does not match the report summary.",
+        path: ["report", "summary", "total_findings"],
+      },
+    )
+    .transform((analysis) => ({
+      source: analysis.source,
+      warning: analysis.warning,
+      summary: {
+        totalFindings:
+          analysis.report.summary.total_findings,
+        byEntityType:
+          analysis.report.summary.by_entity_type,
+        charactersScanned:
+          analysis.report.summary.characters_scanned,
+      },
+      findings: analysis.report.findings,
+      taggedText: analysis.tagged_text,
     }));

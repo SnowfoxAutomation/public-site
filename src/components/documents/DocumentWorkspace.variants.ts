@@ -7,4 +7,5 @@ export const documentWorkspaceVariants = {
   ].join(" "),
   announcement: ["sr-only"].join(" "),
   jobs: ["xl:col-span-2"].join(" "),
+  fullWidth: ["xl:col-span-2"].join(" "),
 } as const;

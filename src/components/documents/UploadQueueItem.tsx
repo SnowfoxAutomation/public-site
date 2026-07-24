@@ -40,12 +40,16 @@ export function UploadQueueItem({
     ? AlertTriangle
     : FileText;
   const isUploading = item.status === "uploading";
+  const isActive =
+    isUploading || item.status === "analyzing";
 
   const statusLabel = {
     ready: documentsContent.queue.readyLabel,
     invalid: documentsContent.queue.invalidLabel,
     uploading:
       documentsContent.queue.uploadingLabel,
+    analyzing:
+      documentsContent.queue.analyzingLabel,
     submitted:
       documentsContent.queue.uploadedLabel,
     processing:
@@ -150,7 +154,7 @@ export function UploadQueueItem({
           className={uploadQueueItemVariants.remove}
           aria-label={`${documentsContent.queue.removeLabel} ${item.file.name}`}
           onClick={() => onRemove(item.localId)}
-          disabled={isUploading}
+          disabled={isActive}
         >
           <X aria-hidden="true" />
         </Button>

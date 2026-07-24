@@ -21,10 +21,17 @@ export type {
   ResultTable,
   ResultWarning,
 } from "./contracts/results";
+export type {
+  AnalysisSummary,
+  AnalyzeDocumentRequest,
+  DocumentAnalysis,
+  PiiFinding,
+} from "./contracts/analysis";
 export {
   apiProblemSchema,
   documentJobResultsSchema,
   documentJobSchema,
+  documentAnalysisSchema,
   jsonValueSchema,
 } from "./contracts/schemas";
 export {
@@ -40,6 +47,7 @@ export {
   parseApiProblem,
 } from "./api/apiError";
 export type { UploadTransport } from "./upload/uploadTransport";
+export type { AnalysisTransport } from "./upload/analysisTransport";
 export type {
   JobUpdateHandlers,
   JobUpdatesTransport,

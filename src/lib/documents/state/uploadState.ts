@@ -1,6 +1,7 @@
 import type { ApiProblem } from "../contracts/common";
 import type { DocumentJob } from "../contracts/jobs";
 import type { DocumentJobResults } from "../contracts/results";
+import type { DocumentAnalysis } from "../contracts/analysis";
 
 export type FileValidationErrorCode =
   | "unsupported_file_type"
@@ -19,6 +20,7 @@ export type UploadQueueItemStatus =
   | "ready"
   | "invalid"
   | "uploading"
+  | "analyzing"
   | "submitted"
   | "processing"
   | "completed"
@@ -36,6 +38,7 @@ export type UploadQueueItem = {
   clientRequestId?: string;
   validationErrors: FileValidationError[];
   problem?: ApiProblem;
+  analysis?: DocumentAnalysis;
 };
 
 export type UploadState = {

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   apiProblemSchema,
+  documentAnalysisSchema,
   documentJobResultsSchema,
   documentJobSchema,
 } from "./schemas";
@@ -9,6 +10,60 @@ import {
 const timestamp = "2026-07-23T15:00:00Z";
 
 describe("document API contracts", () => {
+  it("normalizes the backend analysis response", () => {
+    const analysis = documentAnalysisSchema.parse({
+      source: "report.pdf",
+      warning: "OCR quality was limited.",
+      report: {
+        summary: {
+          total_findings: 1,
+          by_entity_type: {
+            CA_SIN: 1,
+          },
+          characters_scanned: 240,
+        },
+        findings: [
+          {
+            entity_type: "CA_SIN",
+            text: "046 454 286",
+            start: 20,
+            end: 31,
+            score: 0.95,
+          },
+        ],
+      },
+      tagged_text:
+        "SIN: {{CA_SIN: 046 454 286}}",
+      html: "<mark>046 454 286</mark>",
+    });
+
+    expect(analysis.summary.totalFindings).toBe(1);
+    expect(analysis.findings[0]?.entityType).toBe(
+      "CA_SIN",
+    );
+    expect(analysis.warning).toBe(
+      "OCR quality was limited.",
+    );
+  });
+
+  it("rejects inconsistent analysis totals", () => {
+    const result = documentAnalysisSchema.safeParse({
+      source: "report.txt",
+      report: {
+        summary: {
+          total_findings: 2,
+          by_entity_type: {},
+          characters_scanned: 10,
+        },
+        findings: [],
+      },
+      tagged_text: "No findings",
+      html: "No findings",
+    });
+
+    expect(result.success).toBe(false);
+  });
+
   it("normalizes a backend job response", () => {
     const job = documentJobSchema.parse({
       job_id: "job_01",

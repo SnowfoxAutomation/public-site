@@ -68,6 +68,33 @@ export type UploadAction =
       type: "results_failed";
       jobId: string;
       problem: ApiProblem;
+    }
+  | {
+      type: "analysis_started";
+      localId: string;
+    }
+  | {
+      type: "analysis_upload_progressed";
+      localId: string;
+      progress: UploadProgress;
+    }
+  | {
+      type: "analysis_processing";
+      localId: string;
+    }
+  | {
+      type: "analysis_completed";
+      localId: string;
+      analysis: import("../contracts/analysis").DocumentAnalysis;
+    }
+  | {
+      type: "analysis_failed";
+      localId: string;
+      problem: ApiProblem;
+    }
+  | {
+      type: "analysis_cancelled";
+      localId: string;
     };
 
 export function uploadReducer(
@@ -259,6 +286,79 @@ export function uploadReducer(
           ...jobState,
           resultsStatus: "failed",
           resultsProblem: action.problem,
+        }),
+      );
+
+    case "analysis_started":
+      return updateItems(
+        state,
+        [action.localId],
+        (item) => ({
+          ...item,
+          status: "uploading",
+          uploadedBytes: 0,
+          uploadPercent: 0,
+          problem: undefined,
+          analysis: undefined,
+        }),
+      );
+
+    case "analysis_upload_progressed":
+      return updateItems(
+        state,
+        [action.localId],
+        (item) => ({
+          ...item,
+          uploadedBytes:
+            action.progress.loadedBytes,
+          uploadPercent:
+            action.progress.percent ??
+            item.uploadPercent,
+        }),
+      );
+
+    case "analysis_processing":
+      return updateItems(
+        state,
+        [action.localId],
+        (item) => ({
+          ...item,
+          status: "analyzing",
+          uploadedBytes: item.file.size,
+          uploadPercent: 100,
+        }),
+      );
+
+    case "analysis_completed":
+      return updateItems(
+        state,
+        [action.localId],
+        (item) => ({
+          ...item,
+          status: "completed",
+          analysis: action.analysis,
+          problem: undefined,
+        }),
+      );
+
+    case "analysis_failed":
+      return updateItems(
+        state,
+        [action.localId],
+        (item) => ({
+          ...item,
+          status: "failed",
+          problem: action.problem,
+        }),
+      );
+
+    case "analysis_cancelled":
+      return updateItems(
+        state,
+        [action.localId],
+        (item) => ({
+          ...item,
+          status: "cancelled",
         }),
       );
   }

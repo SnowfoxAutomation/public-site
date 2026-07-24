@@ -18,22 +18,19 @@ export function selectSubmissionItems(
   }
 
   const retryableItem = state.items.find(
-    ({ status, problem, clientRequestId }) =>
+    ({ status, problem }) =>
       status === "failed" &&
-      problem?.retryable &&
-      Boolean(clientRequestId),
+      problem?.retryable,
   );
 
-  if (!retryableItem?.clientRequestId) {
+  if (!retryableItem) {
     return [];
   }
 
   return state.items.filter(
-    ({ status, problem, clientRequestId }) =>
+    ({ status, problem }) =>
       status === "failed" &&
-      problem?.retryable &&
-      clientRequestId ===
-        retryableItem.clientRequestId,
+      problem?.retryable,
   );
 }
 
@@ -50,6 +47,8 @@ export function selectHasActiveUpload(
   state: Pick<UploadState, "items">,
 ) {
   return state.items.some(
-    ({ status }) => status === "uploading",
+    ({ status }) =>
+      status === "uploading" ||
+      status === "analyzing",
   );
 }

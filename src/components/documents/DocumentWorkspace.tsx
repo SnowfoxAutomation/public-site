@@ -1,30 +1,29 @@
 "use client";
 
 import {
-  useCallback,
-  useEffect,
   useReducer,
   useRef,
   useState,
 } from "react";
 
 import { documentsContent } from "@/content/documents";
-import { uploadReducer } from "@/lib/documents/state/uploadReducer";
-import { initialUploadState } from "@/lib/documents/state/uploadState";
-import { validateSelectedFiles } from "@/lib/documents/upload/fileValidation";
-import { browserDocumentClient } from "@/lib/documents/api/browserDocumentClient";
 import {
   DocumentApiError,
   parseApiProblem,
 } from "@/lib/documents/api/apiError";
 import { selectSubmissionItems } from "@/lib/documents/state/selectors";
-import { pollingJobUpdates } from "@/lib/documents/updates/pollingJobUpdates";
+import { uploadReducer } from "@/lib/documents/state/uploadReducer";
+import { initialUploadState } from "@/lib/documents/state/uploadState";
+import { analysisTransport } from "@/lib/documents/upload/xhrAnalysisTransport";
+import { validateSelectedFiles } from "@/lib/documents/upload/fileValidation";
 
+import { AnalysisResults } from "./AnalysisResults";
+import { ConfidenceControl } from "./ConfidenceControl";
 import { documentWorkspaceVariants } from "./DocumentWorkspace.variants";
 import { UploadDropzone } from "./UploadDropzone";
 import { UploadQueue } from "./UploadQueue";
-import { JobStatus } from "./JobStatus";
-import { JobResults } from "./JobResults";
+
+const defaultScoreThreshold = 0.5;
 
 export function DocumentWorkspace() {
   const [state, dispatch] = useReducer(
@@ -33,125 +32,10 @@ export function DocumentWorkspace() {
   );
   const [announcement, setAnnouncement] =
     useState("");
-  const uploadController =
+  const [scoreThreshold, setScoreThreshold] =
+    useState(defaultScoreThreshold);
+  const requestController =
     useRef<AbortController | null>(null);
-  const watchedJobs = useRef(
-    new Map<string, AbortController>(),
-  );
-  const [cancellingJobId, setCancellingJobId] =
-    useState<string | null>(null);
-  const requestedResults = useRef(
-    new Set<string>(),
-  );
-
-  const loadResults = useCallback(
-    async (jobId: string) => {
-      dispatch({
-        type: "results_started",
-        jobId,
-      });
-
-      try {
-        const results =
-          await browserDocumentClient.getResults(
-            jobId,
-          );
-        dispatch({
-          type: "results_loaded",
-          jobId,
-          results,
-        });
-      } catch (error) {
-        const problem =
-          error instanceof DocumentApiError
-            ? error.problem
-            : parseApiProblem(null, 503);
-
-        dispatch({
-          type: "results_failed",
-          jobId,
-          problem,
-        });
-      }
-    },
-    [],
-  );
-
-  useEffect(() => {
-    const controllers = watchedJobs.current;
-    const activeStatuses = new Set([
-      "queued",
-      "uploading",
-      "processing",
-    ]);
-
-    state.jobs.forEach(({ job }) => {
-      if (
-        !activeStatuses.has(job.status) ||
-        controllers.has(job.jobId)
-      ) {
-        return;
-      }
-
-      const controller = new AbortController();
-      controllers.set(job.jobId, controller);
-
-      void pollingJobUpdates
-        .watchJob(
-          job.jobId,
-          {
-            onUpdate: (updatedJob) =>
-              dispatch({
-                type: "job_updated",
-                job: updatedJob,
-              }),
-            onError: (problem) =>
-              dispatch({
-                type: "job_update_failed",
-                jobId: job.jobId,
-                problem,
-              }),
-          },
-          controller.signal,
-        )
-        .finally(() => {
-          controllers.delete(job.jobId);
-        });
-    });
-  }, [state.jobs]);
-
-  useEffect(() => {
-    const controllers = watchedJobs.current;
-
-    return () => {
-      controllers.forEach((controller) =>
-        controller.abort(),
-      );
-      controllers.clear();
-    };
-  }, []);
-
-  useEffect(() => {
-    state.jobs.forEach(
-      ({ job, resultsStatus }) => {
-        const hasResults =
-          job.status === "completed" ||
-          job.status ===
-            "partially_completed";
-
-        if (
-          !hasResults ||
-          resultsStatus !== "idle" ||
-          requestedResults.current.has(job.jobId)
-        ) {
-          return;
-        }
-
-        requestedResults.current.add(job.jobId);
-        void loadResults(job.jobId);
-      },
-    );
-  }, [loadResults, state.jobs]);
 
   function addFiles(files: readonly File[]) {
     if (files.length === 0) {
@@ -169,118 +53,95 @@ export function DocumentWorkspace() {
     );
   }
 
-  async function cancelJob(jobId: string) {
-    setCancellingJobId(jobId);
-
-    try {
-      const job =
-        await browserDocumentClient.cancelJob(jobId);
-      watchedJobs.current.get(jobId)?.abort();
-      dispatch({ type: "job_updated", job });
-    } catch (error) {
-      const problem =
-        error instanceof DocumentApiError
-          ? error.problem
-          : parseApiProblem(null, 503);
-
-      dispatch({
-        type: "job_update_failed",
-        jobId,
-        problem,
-      });
-    } finally {
-      setCancellingJobId(null);
-    }
-  }
-
-  function retryResults(jobId: string) {
-    requestedResults.current.add(jobId);
-    void loadResults(jobId);
-  }
-
-  async function submitFiles() {
-    const readyItems =
+  async function analyzeDocuments() {
+    const submissionItems =
       selectSubmissionItems(state);
 
-    if (readyItems.length === 0) {
+    if (submissionItems.length === 0) {
       return;
     }
 
-    const localIds = readyItems.map(
-      ({ localId }) => localId,
-    );
     const controller = new AbortController();
-    const clientRequestId =
-      readyItems[0]?.clientRequestId ??
-      crypto.randomUUID();
+    requestController.current = controller;
 
-    uploadController.current = controller;
-    dispatch({
-      type: "upload_started",
-      localIds,
-      clientRequestId,
-    });
-
-    try {
-      const job =
-        await browserDocumentClient.createJob(
-          {
-            clientRequestId,
-            files: readyItems.map(
-              ({ localId, file }) => ({
-                clientFileId: localId,
-                file,
-              }),
-            ),
-          },
-          {
-            signal: controller.signal,
-            onProgress: (progress) =>
-              dispatch({
-                type: "upload_progressed",
-                localIds,
-                progress,
-              }),
-          },
-        );
+    for (const item of submissionItems) {
+      if (controller.signal.aborted) {
+        break;
+      }
 
       dispatch({
-        type: "job_created",
-        localIds,
-        job,
+        type: "analysis_started",
+        localId: item.localId,
       });
-      setAnnouncement(
-        `${readyItems.length} document${readyItems.length === 1 ? "" : "s"} submitted for processing.`,
-      );
-    } catch (error) {
-      if (
-        error instanceof DOMException &&
-        error.name === "AbortError"
-      ) {
+
+      try {
+        const analysis =
+          await analysisTransport.analyze(
+            {
+              file: item.file,
+              scoreThreshold,
+            },
+            {
+              signal: controller.signal,
+              onProgress: (progress) =>
+                dispatch({
+                  type: "analysis_upload_progressed",
+                  localId: item.localId,
+                  progress,
+                }),
+              onUploadComplete: () =>
+                dispatch({
+                  type: "analysis_processing",
+                  localId: item.localId,
+                }),
+            },
+          );
+
         dispatch({
-          type: "upload_cancelled",
-          localIds,
+          type: "analysis_completed",
+          localId: item.localId,
+          analysis,
         });
         setAnnouncement(
-          documentsContent.queue.cancelledLabel,
+          documentsContent.queue.completedLabel,
         );
-      } else {
+      } catch (error) {
+        if (
+          error instanceof DOMException &&
+          error.name === "AbortError"
+        ) {
+          dispatch({
+            type: "analysis_cancelled",
+            localId: item.localId,
+          });
+          setAnnouncement(
+            documentsContent.queue.cancelledLabel,
+          );
+          break;
+        }
+
         const problem =
           error instanceof DocumentApiError
             ? error.problem
             : parseApiProblem(null, 503);
 
         dispatch({
-          type: "upload_failed",
-          localIds,
+          type: "analysis_failed",
+          localId: item.localId,
           problem,
         });
         setAnnouncement(problem.detail);
       }
-    } finally {
-      uploadController.current = null;
     }
+
+    requestController.current = null;
   }
+
+  const isAnalyzing = state.items.some(
+    ({ status }) =>
+      status === "uploading" ||
+      status === "analyzing",
+  );
 
   return (
     <div className={documentWorkspaceVariants.root}>
@@ -294,13 +155,25 @@ export function DocumentWorkspace() {
         {announcement}
       </p>
 
+      <div
+        className={
+          documentWorkspaceVariants.fullWidth
+        }
+      >
+        <ConfidenceControl
+          value={scoreThreshold}
+          disabled={isAnalyzing}
+          onChange={setScoreThreshold}
+        />
+      </div>
+
       <UploadDropzone onFilesSelected={addFiles} />
 
       <UploadQueue
         items={state.items}
-        onSubmit={() => void submitFiles()}
+        onSubmit={() => void analyzeDocuments()}
         onCancel={() =>
-          uploadController.current?.abort()
+          requestController.current?.abort()
         }
         onRemove={(localId) =>
           dispatch({
@@ -314,24 +187,11 @@ export function DocumentWorkspace() {
       />
 
       <div
-        className={documentWorkspaceVariants.jobs}
+        className={
+          documentWorkspaceVariants.fullWidth
+        }
       >
-        <JobStatus
-          jobs={state.jobs}
-          cancellingJobId={cancellingJobId}
-          onCancel={(jobId) =>
-            void cancelJob(jobId)
-          }
-        />
-      </div>
-
-      <div
-        className={documentWorkspaceVariants.jobs}
-      >
-        <JobResults
-          jobs={state.jobs}
-          onRetry={retryResults}
-        />
+        <AnalysisResults items={state.items} />
       </div>
     </div>
   );

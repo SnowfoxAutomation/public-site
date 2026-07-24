@@ -54,4 +54,5 @@ export type UploadProgress = {
 export type UploadRequestOptions = {
   signal?: AbortSignal;
   onProgress?: (progress: UploadProgress) => void;
+  onUploadComplete?: () => void;
 };

@@ -4,9 +4,11 @@ import { getDocumentApiConfig } from "../config";
 import type { DocumentJob } from "../contracts/jobs";
 import type { DocumentJobResults } from "../contracts/results";
 import {
+  documentAnalysisSchema,
   documentJobResultsSchema,
   documentJobSchema,
 } from "../contracts/schemas";
+import type { DocumentAnalysis } from "../contracts/analysis";
 import {
   DocumentApiError,
   parseApiProblem,
@@ -109,6 +111,24 @@ function encodeJobId(jobId: string) {
 }
 
 export const serverDocumentClient = {
+  analyzeDocument(
+    formData: FormData,
+    signal?: AbortSignal,
+  ): Promise<
+    ValidatedBackendResponse<DocumentAnalysis>
+  > {
+    return requestDocumentApi(
+      "/analyze",
+      {
+        method: "POST",
+        body: formData,
+        signal,
+      },
+      (payload) =>
+        documentAnalysisSchema.parse(payload),
+    );
+  },
+
   createJob(
     formData: FormData,
     idempotencyKey: string,

@@ -12,9 +12,8 @@ export const acceptedDocumentTypes = [
   },
   {
     label: "Microsoft Word",
-    extensions: [".doc", ".docx"],
+    extensions: [".docx"],
     mimeTypes: [
-      "application/msword",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ],
   },
@@ -29,11 +28,25 @@ export const acceptedDocumentTypes = [
     mimeTypes: ["text/csv", "application/csv"],
   },
   {
-    label: "Microsoft Excel",
-    extensions: [".xls", ".xlsx"],
+    label: "Markdown",
+    extensions: [".md"],
+    mimeTypes: ["text/markdown", "text/plain"],
+  },
+  {
+    label: "Log file",
+    extensions: [".log"],
+    mimeTypes: ["text/plain"],
+  },
+  {
+    label: "JSON",
+    extensions: [".json"],
+    mimeTypes: ["application/json", "text/json"],
+  },
+  {
+    label: "Microsoft PowerPoint",
+    extensions: [".pptx"],
     mimeTypes: [
-      "application/vnd.ms-excel",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
     ],
   },
   {
@@ -50,6 +63,16 @@ export const acceptedDocumentTypes = [
     label: "TIFF image",
     extensions: [".tif", ".tiff"],
     mimeTypes: ["image/tiff"],
+  },
+  {
+    label: "BMP image",
+    extensions: [".bmp"],
+    mimeTypes: ["image/bmp", "image/x-ms-bmp"],
+  },
+  {
+    label: "WebP image",
+    extensions: [".webp"],
+    mimeTypes: ["image/webp"],
   },
 ] as const satisfies readonly AcceptedDocumentType[];
 

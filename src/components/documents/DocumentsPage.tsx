@@ -70,6 +70,32 @@ export function DocumentsPage() {
                 </p>
               </aside>
 
+              <aside
+                className={
+                  documentsPageVariants.notice
+                }
+                aria-labelledby="document-expectations-title"
+              >
+                <h2
+                  id="document-expectations-title"
+                  className={
+                    documentsPageVariants.noticeTitle
+                  }
+                >
+                  {documentsContent.expectations.title}
+                </h2>
+                <p
+                  className={
+                    documentsPageVariants.noticeBody
+                  }
+                >
+                  {
+                    documentsContent.expectations
+                      .description
+                  }
+                </p>
+              </aside>
+
               <DocumentWorkspace />
             </div>
           </Container>
